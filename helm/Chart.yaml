@@ -1,0 +1,9 @@
+apiVersion: v1
+name: vintage-story-server
+version: 1.0.0
+description: Vintage Story dedicated server.
+keywords:
+- game
+- server
+- vintage story
+home: "https://github.com/jsknnr/vintage-story-server"

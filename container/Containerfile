@@ -1,0 +1,43 @@
+FROM debian:12-slim
+
+ARG IMAGE_VERSION="v1.0.0-devel"
+ARG MAINTAINER="https://github.com/jsknnr/vintage-story-server"
+
+ARG CONTAINER_GID=10000
+ARG CONTAINER_UID=10000
+
+ENV GAME_VERSION='1.19.8'
+
+ENV VINTAGE_STORY_PATH='/home/vintagestory'
+ENV DOTNET_RUNTIME='https://download.visualstudio.microsoft.com/download/pr/09e67261-215a-4003-bcf8-f90d67dcd02b/b32cf12a5c10b1f74e21c8cb03880891/aspnetcore-runtime-7.0.20-linux-x64.tar.gz'
+ENV DOTNET_PATH='/.dotnet'
+
+RUN groupadd -g $CONTAINER_GID vintagestory \
+    && useradd -g $CONTAINER_GID -u $CONTAINER_UID -m vintagestory \
+    && apt-get update \
+    && apt-get install --no-install-recommends -y \
+        ca-certificates \
+        wget \
+        procps \
+        libicu72 \
+    && wget "$DOTNET_RUNTIME" \
+    && mkdir "$DOTNET_PATH" \
+    && tar xzf aspnetcore-runtime-7.0.20-linux-x64.tar.gz -C "$DOTNET_PATH" \
+    && rm -f aspnetcore-runtime-7.0.20-linux-x64.tar.gz \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean \
+    && apt-get autoremove -y
+
+USER vintagestory
+
+RUN mkdir -p "${VINTAGE_STORY_PATH}/server" \
+    && mkdir -p "${VINTAGE_STORY_PATH}/data" \
+    && echo "${IMAGE_VERSION}" > "${VINTAGE_STORY_PATH}/image_version" \
+    && echo "${MAINTAINER}" > "${VINTAGE_STORY_PATH}/image_maintainer" \
+    && echo "${CONTAINER_UID}:${CONTAINER_GID}" > "${VINTAGE_STORY_PATH}/expected_filesystem_permissions"
+
+COPY entrypoint.sh "${VINTAGE_STORY_PATH}/entrypoint.sh"
+
+WORKDIR "$VINTAGE_STORY_PATH"
+
+CMD ["./entrypoint.sh"]

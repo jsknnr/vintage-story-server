@@ -1,0 +1,24 @@
+image:
+  repository: sknnr/vintage-story-server
+  tag: latest
+
+service:
+  type: LoadBalancer
+  externalIPs: []
+  annotations: {}
+
+resources:
+  requests:
+    memory: 12G
+    cpu: 4.0
+
+volumes:
+  dataPVC:
+    size: 10Gi
+  serverPVC:
+    size: 10Gi
+  storageClassName: ""
+
+config:
+  gameVersion: "1.19.8"
+  gamePort: 42420

@@ -1,0 +1,14 @@
+version: '3'
+services:
+  enshrouded:
+    image: sknnr/vintage-story-server:latest
+    ports:
+      - "42420:42420/udp"
+    environment:
+      - GAME_VERSION='1.19.8'
+    volumes:
+      - vintage-story-data:/home/vintagestory/data
+      - vintage-story-server:/home/vintagestory/server
+volumes:
+  vintage-story-data:
+  vintage-story-server:
