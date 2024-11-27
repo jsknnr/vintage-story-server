@@ -8,7 +8,7 @@ Run Vintage Story dedicated server in a container. Optionally includes helm char
 **Disclaimer:** This is not an official image. No support, implied or otherwise is offered to any end user by the author or anyone else. Feel free to do what you please with the contents of this repo.
 ## Usage
 
-The processes within the container do **NOT** run as root. Everything runs as the user steam (gid:10000/uid:10000 by default). If you exec into the container, you will drop into `/home/vintagestory` as the vintagestory user. Persistent volumes should be mounted to `/home/vintagestory/server/` for server binaries and `/home/vintagestory/data` for persistent data and be owned by 10000:10000. 
+The processes within the container do **NOT** run as root. Everything runs as the user vintagestory (gid:10000/uid:10000 by default). If you exec into the container, you will drop into `/home/vintagestory` as the vintagestory user. Persistent volumes should be mounted to `/home/vintagestory/server/` for server binaries and `/home/vintagestory/data` for persistent data and be owned by 10000:10000. 
 
 If you absolutely require to run the process in the container as a gid/uid other than 10000, you can build your own image based on my dockerfile.
 
