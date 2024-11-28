@@ -75,7 +75,7 @@ compose.yaml file:
 ```yaml
 version: '3'
 services:
-  enshrouded:
+  vintage-story:
     image: sknnr/vintage-story-server:latest
     ports:
       - "42420:42420/udp"
