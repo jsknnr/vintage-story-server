@@ -20,7 +20,8 @@ build:
 	podman build $(PODMAN_BUILD_OPTS) -t $(IMAGE_REF):latest ./container
 
 run:
-	podman volume create $(VOLUME_NAME)
+	podman volume create $(SERVER_VOLUME_NAME)
+	podman volume create $(DATA_VOLUME_NAME)
 	podman run $(PODMAN_RUN_OPTS) $(IMAGE_REF):latest
 
 run-no-vol:
@@ -30,12 +31,14 @@ run-no-vol:
 clean-all:
 	podman rm -f $(CONTAINER_NAME)
 	podman rmi -f $(IMAGE_REF):latest
-	podman volume rm $(VOLUME_NAME)
+	podman volume rm $(SERVER_VOLUME_NAME)
+	podman volume rm $(DATA_VOLUME_NAME)
 
 # Clean container and volume
 clean-build:
 	podman rm -f $(CONTAINER_NAME)
-	podman volume rm $(VOLUME_NAME)
+	podman volume rm $(SERVER_VOLUME_NAME)
+	podman volume rm $(DATA_VOLUME_NAME)
 
 # Clean container
 clean-container:
@@ -43,7 +46,8 @@ clean-container:
 
 # Clean volume
 clean-volume:
-	podman volume rm $(VOLUME_NAME)
+	podman volume rm $(SERVER_VOLUME_NAME)
+	podman volume rm $(DATA_VOLUME_NAME)
 
 # Clean image
 clean-image:
