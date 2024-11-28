@@ -107,6 +107,31 @@ podman run \
   docker.io/sknnr/vintage-story-server:latest
 ```
 
+### Quadlet
+To run the container with Podman's new quadlet subsystem, make a file under (as root, or as user with sudo permission) /etc/containers/systemd/vintagestory.container containing:
+```properties
+[Unit]
+Description=Vintage Story Game Server
+
+[Container]
+Image=docker.io/sknnr/vintage-story-server:latest
+Volume=vintage-story-data:/home/vintagestory/data
+Volume=vintage-story-server:/home/vintagestory/server
+PublishPort=42420:42420/udp
+ContainerName=vintage-story-server
+Environment=GAME_VERSION="1.19.8"
+
+[Service]
+# Restart service when sleep finishes
+Restart=always
+# Extend Timeout to allow time to pull the image
+TimeoutStartSec=900
+
+[Install]
+# Start by default on boot
+WantedBy=multi-user.target default.target
+```
+
 ### Kubernetes
 
 I've built a Helm chart and have included it in the `helm` directory within this repo. Modify the `values.yaml` file to your liking and install the chart into your cluster. Be sure to create and specify a namespace as I did not include a template for provisioning a namespace.
