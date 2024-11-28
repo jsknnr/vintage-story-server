@@ -28,6 +28,9 @@ There is an example of the config file in this repo under the container director
 
 I will probably parameterize this in the future.
 
+### Updating Server
+The image is capable of updating itself, but not automatically. If a new version is released, just update the `GAME_VERSION` variable to match the new version and when the container starts it will update to the new version.
+
 ### Ports
 
 If you want to change the port, you have to do this in the serverconfig.json file
