@@ -22,3 +22,5 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/vintage-story-server:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/vintage-story-server:${{ github.event.release.tag_name }}
+          build-args: |
+            IMAGE_VERSION=${{ github.event.release.tag_name }}
