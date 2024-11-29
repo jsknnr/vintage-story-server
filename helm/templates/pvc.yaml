@@ -34,3 +34,4 @@ spec:
       storage: {{ .Values.volumes.serverPVC.size }}
   {{- if ne .Values.volumes.storageClassName "" }}
   storageClassName: {{ .Values.volumes.storageClassName }}
+  {{- end }}
