@@ -3,7 +3,7 @@ services:
   vintage-story:
     image: sknnr/vintage-story-server:latest
     ports:
-      - "42420:42420/udp"
+      - "42420:42420/tcp"
     environment:
       - GAME_VERSION='1.19.8'
     volumes:

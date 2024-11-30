@@ -19,7 +19,7 @@ spec:
   - name: game-port
     port: {{ .Values.config.gamePort | int }}
     targetPort: game-port
-    protocol: UDP
+    protocol: TCP
     {{- if eq .Values.service.type "NodePort" }}
     nodePort: {{ .Values.config.gamePort | int }}
     {{- end }}

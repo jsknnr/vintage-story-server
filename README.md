@@ -37,7 +37,7 @@ If you want to change the port, you have to do this in the serverconfig.json fil
 
 | Port | Protocol | Default |
 | ---- | -------- | ------- |
-| Game Port | UDP | 42420 |
+| Game Port | TCP | 42420 |
 
 ### Environment Variables
 
@@ -55,7 +55,7 @@ docker run \
   --name vintage-story \
   --mount type=volume,source=vintage-story-data,target=/home/vintagestory/data \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
-  --publish 42420:42420/udp \
+  --publish 42420:42420/tcp \
   --env=GAME_VERSION='1.19.8' \
   sknnr/vintage-story-server:latest
 ```
@@ -81,7 +81,7 @@ services:
   vintage-story:
     image: sknnr/vintage-story-server:latest
     ports:
-      - "42420:42420/udp"
+      - "42420:42420/tcp"
     environment:
       - GAME_VERSION='1.19.8'
     volumes:
@@ -102,7 +102,7 @@ podman run \
   --name vintage-story \
   --mount type=volume,source=vintage-story-data,target=/home/vintagestory/data \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
-  --publish 42420:42420/udp \
+  --publish 42420:42420/tcp \
   --env=GAME_VERSION='1.19.8' \
   docker.io/sknnr/vintage-story-server:latest
 ```
@@ -117,7 +117,7 @@ Description=Vintage Story Game Server
 Image=docker.io/sknnr/vintage-story-server:latest
 Volume=vintage-story-data:/home/vintagestory/data
 Volume=vintage-story-server:/home/vintagestory/server
-PublishPort=42420:42420/udp
+PublishPort=42420:42420/tcp
 ContainerName=vintage-story-server
 Environment=GAME_VERSION="1.19.8"
 

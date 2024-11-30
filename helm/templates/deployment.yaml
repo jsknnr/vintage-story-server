@@ -37,7 +37,7 @@ spec:
         ports:
         - name: game-port
           containerPort: {{ .Values.config.gamePort | int }}
-          protocol: UDP
+          protocol: TCP
         volumeMounts:
         - name: server
           mountPath: /home/vintagestory/server
