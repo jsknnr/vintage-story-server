@@ -22,7 +22,7 @@ data:
       "ModDbUrl": "https://mods.vintagestory.at/",
       "ClientConnectionTimeout": 150,
       "EntityDebugMode": false,
-      "Password": {{ .Values.serverConfig.serverPassword | quote }},
+      "Password": {{ if .Values.serverConfig.serverPassword }}{{ .Values.serverConfig.serverPassword | quote }}{{ else }}null{{ end }},
       "MapSizeX": 1024000,
       "MapSizeY": 256,
       "MapSizeZ": 1024000,
