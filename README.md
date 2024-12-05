@@ -46,6 +46,13 @@ If you want to change the port, you have to do this in the serverconfig.json fil
 | GAME_VERSION | Version of Vintage Story server to run | 1.19.8 | False |
 | GAME_BRANCH | Which branch to pull server files from, "stable" or "unstable" | stable | False |
 
+### Server Config Environment Variables
+These settings will override specific options in the serverconfig.json file. If you don't want to supply your own modified file, you can use these to set options
+
+| Name | Description | Defaut | Required |
+| ---- | ----------- | ------ | -------- |
+
+
 ### Docker
 
 To run the container in Docker, run the following command:
