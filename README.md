@@ -44,6 +44,7 @@ If you want to change the port, you have to do this in the serverconfig.json fil
 | Name | Description | Default | Required |
 | ---- | ----------- | ------- | -------- |
 | GAME_VERSION | Version of Vintage Story server to run | 1.19.8 | False |
+| GAME_BRANCH | Which branch to pull server files from, "stable" or "unstable" | stable | False |
 
 ### Docker
 

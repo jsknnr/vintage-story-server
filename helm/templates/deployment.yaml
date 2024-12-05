@@ -34,6 +34,8 @@ spec:
         env:
         - name: GAME_VERSION
           value: {{ .Values.config.gameVersion | squote }}
+        - name: GAME_BRANCH
+          value: {{ .Values.config.gameBranch | squote }}
         ports:
         - name: game-port
           containerPort: {{ .Values.config.gamePort | int }}

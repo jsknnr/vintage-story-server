@@ -41,7 +41,7 @@ rm "${VINTAGE_STORY_PATH}/data/test"
 # Get Vintage Story server binaries
 if ! [ -f "${VINTAGE_STORY_PATH}/server/VERSION" ]; then
     echo "$(timestamp) INFO: Downloading Vintage Story server version ${GAME_VERSION}"
-    wget https://cdn.vintagestory.at/gamefiles/stable/vs_server_linux-x64_${GAME_VERSION}.tar.gz
+    wget https://cdn.vintagestory.at/gamefiles/${GAME_BRANCH,,}/vs_server_linux-x64_${GAME_VERSION}.tar.gz
     tar xzf vs_server_linux-x64_${GAME_VERSION}.tar.gz -C "${VINTAGE_STORY_PATH}/server"
     echo "${GAME_VERSION}" > "${VINTAGE_STORY_PATH}/server/VERSION"
 elif [ $(cat ${VINTAGE_STORY_PATH}/server/VERSION) != "$GAME_VERSION" ]; then

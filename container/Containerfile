@@ -6,6 +6,7 @@ ARG MAINTAINER="https://github.com/jsknnr/vintage-story-server"
 ARG CONTAINER_GID=10000
 ARG CONTAINER_UID=10000
 
+ENV GAME_BRANCH='stable'
 ENV GAME_VERSION='1.19.8'
 
 ENV VINTAGE_STORY_PATH='/home/vintagestory'
