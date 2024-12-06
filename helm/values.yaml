@@ -38,6 +38,7 @@ serverConfig:
   serverName: "The Glorious Server"
   serverDescription: ""
   welcomeMessage: "Welcome {0}, may you survive well and prosper"
+  advertiseServer: true
   maxPlayers: 16
   password: ""
   mapSizeX: 1024000
