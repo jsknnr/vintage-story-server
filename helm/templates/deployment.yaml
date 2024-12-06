@@ -36,6 +36,10 @@ spec:
           value: {{ .Values.config.gameVersion | squote }}
         - name: GAME_BRANCH
           value: {{ .Values.config.gameBranch | squote }}
+        - name: BACKUP_CRON_SCHEDULE
+          value: {{ .Values.config.backupCronSchedule | squote }}
+        - name: BACKUP_RETENTION_DAYS
+          value: {{ .Values.config.backupRetentionDays | squote }}
         ports:
         - name: game-port
           containerPort: {{ .Values.config.gamePort | int }}
@@ -50,7 +54,7 @@ spec:
           mountPath: /home/vintagestory/data/Backups
 {{- end }}
         - name: serverconfig
-          mountPath: /home/vintagestory/data
+          mountPath: /home/vintagestory/data/serverconfig.json
           subPath: serverconfig.json
         securityContext:
           allowPrivilegeEscalation: false
