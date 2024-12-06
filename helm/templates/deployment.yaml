@@ -45,6 +45,13 @@ spec:
           mountPath: /home/vintagestory/server
         - name: data
           mountPath: /home/vintagestory/data
+{{- if .Values.volumes.backupPVC.enabled }}
+        - name: backups
+          mountPath: /home/vintagestory/data/Backups
+{{- end }}
+        - name: serverconfig
+          mountPath: /home/vintagestory/data
+          subPath: serverconfig.json
         securityContext:
           allowPrivilegeEscalation: false
       volumes:
@@ -54,3 +61,11 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: "{{ .Chart.Name }}-data"
+{{- if .Values.volumes.backupPVC.enabled }}
+      - name: backups
+        persistentVolumeClaim:
+          claimName: "{{ .Chart.Name }}-backups"
+{{- end }}
+      - name: serverconfig
+        configMap:
+          name: serverconfig

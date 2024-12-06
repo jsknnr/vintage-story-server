@@ -9,17 +9,101 @@ service:
 
 resources:
   requests:
-    memory: 12G
+    memory: 16G
     cpu: 4.0
 
 volumes:
+  storageClassName: ""
   dataPVC:
-    size: 10Gi
+    size: 40Gi
   serverPVC:
     size: 10Gi
-  storageClassName: ""
+  backupPVC:
+    enabled: false
+    size: 20Gi
+    storageClassName: ""
 
 config:
   gameVersion: "1.19.8"
   gameBranch: "stable"
   gamePort: 42420
+
+# The majority of the values below come from a default survival world that was created without modification
+# I suggest only changing them if you know what they do
+# Relevant documentation can be found here https://wiki.vintagestory.at/index.php/Server_Config
+# and here https://wiki.vintagestory.at/Special:MyLanguage/World_Configuration
+serverConfig:
+  serverName: "The Glorious Server"
+  serverDescription: ""
+  welcomeMessage: "Welcome {0}, may you survive well and prosper"
+  maxPlayers: 16
+  password: ""
+  mapSizeX: 1024000
+  mapSizeZ: 1024000
+  serverLanguage: "en"
+  seed: ""
+  worldName: "Our Little World"
+  allowCreative: true
+  playStyle: "surviveandbuild"
+  playStyleLangCode: "preset-surviveandbuild"
+  gameMode: "survival"
+  startingClimate: "temperate"
+  spawnRadius: "50"
+  graceTimer: "0"
+  deathPunishment: "drop"
+  droppedItemsTimer: "600"
+  seasons: "enabled"
+  playerLives: "-1"
+  lungCapacity: "40000"
+  daysPerMonth: "9"
+  harshWinters: "true"
+  blockGravity: "sandgravel"
+  caveIns: "off"
+  allowUndergroundFarming: false
+  bodyTemperatureResistance: "0"
+  creatureHostility: "aggressive"
+  creatureStrength: "1"
+  playerHealthPoints: "15"
+  playerHungerSpeed: "1"
+  playerHealthRegenSpeed: "1"
+  playerMoveSpeed: "1.5"
+  foodSpoilSpeed: "1"
+  saplingGrowthRate: "1"
+  toolDurability: "1"
+  toolMiningSpeed: "1"
+  propickNodeSearchRadius: "6"
+  globalDepositSpawnRate: "1"
+  microblockChiseling: "stonewood"
+  allowCoordinatedHud: true
+  allowMap: true
+  colorAccurateWorldmap: false
+  loreContent: true
+  clutterObtainable: "ifrepaired"
+  temporalStorms: "sometimes"
+  temporalstormDurationMul: "1"
+  temporalStability: true
+  temporalRifts: "visible"
+  temporalGearRespawnUses: "20"
+  temporalStormSleeping: "0"
+  worldClimate: "realistic"
+  landcover: "1"
+  oceanscale: "1"
+  upheavelCommonness: "0.3"
+  geologicActivity: "0.05"
+  landformScale: "1.0"
+  worldEdge: "traversable"
+  polarEquatorDistance: "100000"
+  globalTemperature: "1"
+  globalPercipitation: "1"
+  globalForestation: "0"
+  surfaceCopperDeposits: "0.12"
+  surfaceTinDeposits: "0.007"
+  snowAccum: "true"
+  allowLandClaiming: true
+  classExclusiveRecipes: true
+  auctionHouse: true
+  onlyWhitelisted: false
+  allowPvP: true
+  allowFireSpread: true
+  allowFallingBlocks: true
+  startupCommands: ""
