@@ -27,6 +27,8 @@ config:
   gameVersion: "1.19.8"
   gameBranch: "stable"
   gamePort: 42420
+  backupCronSchedule: "0 3 * * *"
+  backupRetentionDays: "7"
 
 # The majority of the values below come from a default survival world that was created without modification
 # I suggest only changing them if you know what they do
