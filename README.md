@@ -252,7 +252,7 @@ podman run \
 
 #### Running with Podman and letting container build a serverconfig.json for you
 ```bash
-docker run \
+podman run \
   --detach \
   --name vintage-story \
   --mount type=volume,source=vintage-story-data,target=/home/vintagestory/data \
