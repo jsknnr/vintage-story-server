@@ -57,6 +57,7 @@ sudo chown 10000:10000 /my/container/volume/path/data/serverconfig.json
 ```
 
 ### Ports
+Game Port is specified in serverconfig.json
 
 | Port      | Protocol | Default |
 |-----------|----------|---------|
@@ -86,6 +87,7 @@ These variables only work when creating a new serverconfig.json, they do not mod
 | serverName                | The name of the server                                                                                                 | "The Glorious Server"                         |
 | serverDescription         | The description of the server                                                                                          | ""                                            |
 | welcomeMessage            | The message that displays when joining the server                                                                      | "Welcome {0}, may you survive well and prosper" |
+| port                      | The port the server should listen on                                                                                   | 42420 |
 | maxPlayers                | Maximum number of concurrent players                                                                                   | 16                                            |
 | password                  | Password protects the server if specified                                                                              | ""                                            |
 | mapSizeX                  | World X (width) axis size in blocks                                                                                    | 1024000                                       |
