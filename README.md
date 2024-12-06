@@ -14,6 +14,8 @@ The processes within the container do **NOT** run as root. Everything runs as th
 If you absolutely require to run the process in the container as a gid/uid other than 10000, you can build your own image based on my dockerfile.
 
 ### serverconfig.json
+If you do not mount a serverconfig.json file into the container, then the container will build one for you.
+
 Most of the settings for the server are in `serverconfig.json` which exists at `/home/vintagestory/data/serverconfig.json` in the container. You can supply your own serverconfig.json by mounting it into the container in the method of your choosing.
 If the serverconfig.json file is not found during startup, the container will create one for you based on the variables you can define in [Server Config Environment Variables](#server-config-environment-variables)
 
@@ -75,12 +77,12 @@ Game Port is specified in serverconfig.json
 
 
 ### Server Config Environment Variables
-These variables are all optional and only necessary if you aren't bringing your own serverconfig.json and would like the container to generate one for you.
+These variables are **all optional** and only necessary if you aren't bringing your own serverconfig.json and would like the container to generate one for you.
 If the container does not find a mounted serverconfig.json file, it will automatically begin the process of building one based on these variables. You only need to supply the variables you want to change.
-With the exceptions of serverName and worldName, all of the defaults below are taken from an unmodified default survival world. When supplying your own values for the below, pay attention to the formatting of the default,
-if it's quoted, use quotes, if it is not quoted, don't use quotes.
 
-These variables only work when creating a new serverconfig.json, they do not modify an existing serverconfig.json
+With the exceptions of serverName and worldName, all of the defaults below are taken from an unmodified default survival world.
+
+These variables only work when creating a new serverconfig.json, they do not modify an existing serverconfig.json (unless you are using the Kubernetes helm chart, then it will update the config map)
 
 | Name                      | Description                                                                                                            | Default                                       |
 |---------------------------|------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
@@ -163,8 +165,24 @@ These variables only work when creating a new serverconfig.json, they do not mod
 
 ### Docker
 
-To run the container in Docker, run the following command:
+To run the container in Docker, see the following examples.
 
+
+#### Running with Docker and mounting a serverconfig.json file into the container
+```bash
+docker run \
+  --detach \
+  --name vintage-story \
+  --mount type=volume,source=vintage-story-data,target=/home/vintagestory/data \
+  --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
+  --mount type=bind,source=/my/local/path/to/serverconfig.json,target=/home/vintagestory/data/serverconfig.json \
+  --publish 42420:42420/tcp \
+  --env=GAME_VERSION='1.19.8' \
+  --env=GAME_BRANCH='stable' \
+  sknnr/vintage-story-server:latest
+```
+
+#### Running with Docker and letting container build a serverconfig.json for you
 ```bash
 docker run \
   --detach \
@@ -173,8 +191,15 @@ docker run \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
   --publish 42420:42420/tcp \
   --env=GAME_VERSION='1.19.8' \
+  --env=GAME_BRANCH='stable' \
+  --env=serverName='My Really Cool Vintage Story Server' \
+  --env=password='supersecretpasswordtojoinmycoolserver' \
+  --env=graceTimer='3' \
+  --env=caveIns='on' \
+  --env=startupCommands="/op myplayername \n /moddb install playercorpse" \
   sknnr/vintage-story-server:latest
 ```
+The above example is similar to the previous example, except we are not mounting a serverconfig.json file into the container. Instead, we are utilizing optional [Environment Variables](#environment-variables) to set the parameters we want to modify.
 
 ### Docker Compose
 
@@ -210,18 +235,39 @@ volumes:
 
 ### Podman
 
-To run the container in Podman, run the following command:
+To run the container in Podman, see the following examples.
 
+#### Running with Podman and mounting a serverconfig.json file into the container
 ```bash
 podman run \
   --detach \
   --name vintage-story \
   --mount type=volume,source=vintage-story-data,target=/home/vintagestory/data \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
+  --mount type=bind,source=/my/local/path/to/serverconfig.json,target=/home/vintagestory/data/serverconfig.json \
   --publish 42420:42420/tcp \
   --env=GAME_VERSION='1.19.8' \
   docker.io/sknnr/vintage-story-server:latest
 ```
+
+#### Running with Podman and letting container build a serverconfig.json for you
+```bash
+docker run \
+  --detach \
+  --name vintage-story \
+  --mount type=volume,source=vintage-story-data,target=/home/vintagestory/data \
+  --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
+  --publish 42420:42420/tcp \
+  --env=GAME_VERSION='1.19.8' \
+  --env=GAME_BRANCH='stable' \
+  --env=serverName='My Really Cool Vintage Story Server' \
+  --env=password='supersecretpasswordtojoinmycoolserver' \
+  --env=graceTimer='3' \
+  --env=caveIns='on' \
+  --env=startupCommands="/op myplayername \n /moddb install playercorpse" \
+  docker.io/sknnr/vintage-story-server:latest
+```
+The above example is similar to the previous example, except we are not mounting a serverconfig.json file into the container. Instead, we are utilizing optional [Environment Variables](#environment-variables) to set the parameters we want to modify.
 
 ### Quadlet
 To run the container with Podman's new quadlet subsystem, make a file under (as root, or as user with sudo permission) /etc/containers/systemd/vintagestory.container containing:
@@ -251,3 +297,5 @@ WantedBy=multi-user.target default.target
 ### Kubernetes
 
 I've built a Helm chart and have included it in the `helm` directory within this repo. Modify the `values.yaml` file to your liking and install the chart into your cluster. Be sure to create and specify a namespace as I did not include a template for provisioning a namespace.
+
+"/moddb install plainsandvalleys v1.19.8 \n /moddb install fromgoldencombs v1.19.8 \n /moddb install primitivesurvival v1.19.8 \n /moddb install expandedfoods v1.19.8 \n /moddb install aculinaryartillery v1.19.8 \n /moddb install millwright v1.19.8 \n /moddb install playercorpse v1.19.8"

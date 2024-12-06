@@ -91,7 +91,7 @@ do
   if [ -n "${!var}" ]; then
     jq_path="${var_paths[$var]}"
     jq_command="$jq_command .$jq_path = \$$var |"
-    jq_args="$jq_args --arg $var \"${!var}\""
+    jq_args="$jq_args --arg $var $'${!var}'"
   fi
 done
 
