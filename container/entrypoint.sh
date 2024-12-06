@@ -9,19 +9,16 @@ timestamp () {
 shutdown () {
     echo ""
     echo "$(timestamp) INFO: Recieved SIGTERM, shutting down gracefully"
-    kill $VS_PID
+    supervisorctl stop all
 }
 
-# Set our trap
+# Set our trap for sigterm
 trap 'shutdown' TERM
 
 # Set vars established during image build
 IMAGE_VERSION=$(cat ${VINTAGE_STORY_PATH}/image_version)
 MAINTAINER=$(cat ${VINTAGE_STORY_PATH}/image_maintainer)
 EXPECTED_FS_PERMS=$(cat ${VINTAGE_STORY_PATH}/expected_filesystem_permissions)
-
-# Set .net path
-export PATH=$PATH:$DOTNET_PATH
 
 echo "$(timestamp) INFO: Launching Vintage Story dedicatged server image ${IMAGE_VERSION} by ${MAINTAINER}"
 
@@ -40,7 +37,7 @@ rm "${VINTAGE_STORY_PATH}/data/test"
 
 # Get Vintage Story server binaries
 if ! [ -f "${VINTAGE_STORY_PATH}/server/VERSION" ]; then
-    echo "$(timestamp) INFO: Downloading Vintage Story server version ${GAME_VERSION}"
+    echo "$(timestamp) INFO: Downloading Vintage Story server version ${GAME_VERSION} from ${GAME_BRANCH}"
     wget https://cdn.vintagestory.at/gamefiles/${GAME_BRANCH,,}/vs_server_linux-x64_${GAME_VERSION}.tar.gz
     tar xzf vs_server_linux-x64_${GAME_VERSION}.tar.gz -C "${VINTAGE_STORY_PATH}/server"
     echo "${GAME_VERSION}" > "${VINTAGE_STORY_PATH}/server/VERSION"
@@ -54,15 +51,23 @@ else
     echo "$(timestamp) INFO: Vintage Story server version ${GAME_VERSION} already present"
 fi
 
-# Launch Vintage Story
-echo "$(timestamp) INFO: Starting Vintage Story server..."
-nohup dotnet "${VINTAGE_STORY_PATH}/server/VintagestoryServer.dll" --dataPath /home/vintagestory/data > /dev/stdout 2>&1 &
+# Set backup schedule
+echo "$(timestamp) INFO: Setting backup CRON schedule as ${BACKUP_CRON_SCHEDULE}"
+echo "${BACKUP_CRON_SCHEDULE} ${VINTAGE_STORY_PATH}/backup.sh" > ${VINTAGE_STORY_PATH}/backup_crontab
 
-# Grab Vintage Story PID
-VS_PID=$!
+# Check if we need to build a serverconfig.json file
+# If we are running in Kubernetes this isn't used as we just expect a ConfigMap
+if [ ! -f "${VINTAGE_STORY_PATH}/data/serverconfig.json" ]; then
+    echo "$(timestamp) INFO: serverconfig.json not found at ${VINTAGE_STORY_PATH}/data/serverconfig.json"
+    echo "$(timestamp) INFO: Generating new serverconfig.json"
+    ${VINTAGE_STORY_PATH}/build_serverconfig.sh
+else
+    echo "$(timestamp) INFO: Found serverconfig.json at ${VINTAGE_STORY_PATH}/data/serverconfig.json"
+fi
 
-# Keep us open
-wait $VS_PID
+# Start Supervisor to manager VintageStoryServer and Backup processes
+echo "$(timestamp) INFO: Starting Supervisor"
+supervisord -c ${VINTAGE_STORY_PATH}/supervisord.conf &
 
-# Handle post sigterm so we can exit cleanly
-tail --pid=$VS_PID -f /dev/null
+# Hold us open
+wait $!
