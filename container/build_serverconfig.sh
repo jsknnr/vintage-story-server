@@ -7,6 +7,7 @@ declare -A var_paths=(
   ["serverName"]="ServerName"
   ["serverDescription"]="ServerDescription"
   ["welcomeMessage"]="WelcomeMessage"
+  ["advertiseServer"]="AdvertiseServer"
   ["port"]="Port"
   ["maxPlayers"]="MaxClients"
   ["password"]="Password"
