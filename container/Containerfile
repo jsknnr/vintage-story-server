@@ -26,6 +26,7 @@ RUN groupadd -g $CONTAINER_GID vintagestory \
         libicu72 \
         supervisor \
         jq \
+        vim \
     && wget "$DOTNET_RUNTIME" \
     && mkdir "$DOTNET_PATH" \
     && tar xzf aspnetcore-runtime-7.0.20-linux-x64.tar.gz -C "$DOTNET_PATH" \
