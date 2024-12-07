@@ -23,5 +23,12 @@ spec:
     {{- if eq .Values.service.type "NodePort" }}
     nodePort: {{ .Values.config.gamePort | int }}
     {{- end }}
+  - name: game-port-udp
+    port: {{ .Values.config.gamePort | int }}
+    targetPort: game-port-udp
+    protocol: UDP
+    {{- if eq .Values.service.type "NodePort" }}
+    nodePort: {{ .Values.config.gamePort | int }}
+    {{- end }}
   selector:
     app: "{{ .Chart.Name }}"

@@ -89,11 +89,11 @@ Now you can log back into your server and see if this is the world for you and y
 ## Running the Container
 
 ### Ports
-Game Port is specified in serverconfig.json. Game versions > 1.19 require TCP and UDP.
+Game Port is specified in serverconfig.json. Game versions > 1.19 UDP as well as TCP.
 
 | Port      | Protocol | Default |
 |-----------|----------|---------|
-| Game Port | TCP      | 42420   |
+| Game Port | TCP & UDP | 42420   |
 
 
 ### Environment Variables
@@ -225,6 +225,7 @@ docker run \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
   --mount type=bind,source=/my/local/path/to/serverconfig.json,target=/home/vintagestory/data/serverconfig.json \
   --publish 42420:42420/tcp \
+  --publish 42420:42420/udp \
   --env=GAME_VERSION='1.19.8' \
   --env=GAME_BRANCH='stable' \
   sknnr/vintage-story-server:latest
@@ -238,6 +239,7 @@ docker run \
   --mount type=volume,source=vintage-story-data,target=/home/vintagestory/data \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
   --publish 42420:42420/tcp \
+  --publish 42420:42420/udp \
   --env=GAME_VERSION='1.19.8' \
   --env=GAME_BRANCH='stable' \
   --env=serverName='My Really Cool Vintage Story Server' \
@@ -271,6 +273,7 @@ services:
     image: sknnr/vintage-story-server:latest
     ports:
       - "42420:42420/tcp"
+      - "42420:42420/udp"
     environment:
       - GAME_VERSION='1.19.8'
     volumes:
@@ -294,6 +297,7 @@ podman run \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
   --mount type=bind,source=/my/local/path/to/serverconfig.json,target=/home/vintagestory/data/serverconfig.json \
   --publish 42420:42420/tcp \
+  --publish 42420:42420/udp \
   --env=GAME_VERSION='1.19.8' \
   docker.io/sknnr/vintage-story-server:latest
 ```
@@ -306,6 +310,7 @@ podman run \
   --mount type=volume,source=vintage-story-data,target=/home/vintagestory/data \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
   --publish 42420:42420/tcp \
+  --publish 42420:42420/udp \
   --env=GAME_VERSION='1.19.8' \
   --env=GAME_BRANCH='stable' \
   --env=serverName='My Really Cool Vintage Story Server' \
@@ -328,6 +333,7 @@ Image=docker.io/sknnr/vintage-story-server:latest
 Volume=vintage-story-data:/home/vintagestory/data
 Volume=vintage-story-server:/home/vintagestory/server
 PublishPort=42420:42420/tcp
+PublishPort=42420:42420/udp
 ContainerName=vintage-story-server
 Environment=GAME_VERSION="1.19.8"
 
