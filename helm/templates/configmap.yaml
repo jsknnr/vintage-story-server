@@ -24,7 +24,7 @@ data:
       "EntityDebugMode": false,
       "Password": {{ if .Values.serverConfig.password }}{{ .Values.serverConfig.password | quote }}{{ else }}null{{ end }},
       "MapSizeX": {{ .Values.serverConfig.mapSizeX | int }},
-      "MapSizeY": 256,
+      "MapSizeY": {{ .Values.serverConfig.mapSizeY | int }},
       "MapSizeZ": {{ .Values.serverConfig.mapSizeZ | int }},
       "ServerLanguage": {{ .Values.serverConfig.serverLanguage | quote }},
       "MaxChunkRadius": 12,
@@ -402,7 +402,7 @@ data:
           "classExclusiveRecipes": {{ .Values.serverConfig.classExclusiveRecipes }},
           "auctionHouse": {{ .Values.serverConfig.auctionHouse }},
         },
-        "MapSizeY": 256,
+        "MapSizeY": {{ .Values.serverConfig.mapSizeY | int }},
         "CreatedByPlayerName": null,
         "DisabledMods": null,
         "RepairMode": false
