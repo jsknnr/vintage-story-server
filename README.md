@@ -7,27 +7,11 @@ Run Vintage Story dedicated server in a container. Optionally includes helm char
 
 **Disclaimer:** This is not an official image. No support, implied or otherwise is offered to any end user by the author or anyone else. Feel free to do what you please with the contents of this repo.
 
-## Usage
+## Managing the Container
 
-The processes within the container do **NOT** run as root. Everything runs as the user vintagestory (gid:10000/uid:10000 by default). If you exec into the container, you will drop into `/home/vintagestory` as the vintagestory user. Persistent volumes should be mounted to `/home/vintagestory/server/` for server binaries and `/home/vintagestory/data` for persistent data and be owned by 10000:10000. 
+The processes within the container do **NOT** run as root. Everything runs as the user vintagestory (gid:10000/uid:10000 by default). If you exec into the container, you will drop into `/home/vintagestory` as the vintagestory user. Persistent volumes should be mounted to `/home/vintagestory/server/` for server binaries and `/home/vintagestory/data` for persistent config, world save, and mod data.
 
-If you absolutely require to run the process in the container as a gid/uid other than 10000, you can build your own image based on my dockerfile.
-
-### serverconfig.json
-If you do not mount a serverconfig.json file into the container, then the container will build one for you.
-
-Most of the settings for the server are in `serverconfig.json` which exists at `/home/vintagestory/data/serverconfig.json` in the container. You can supply your own serverconfig.json by mounting it into the container in the method of your choosing.
-If the serverconfig.json file is not found during startup, the container will create one for you based on the variables you can define in [Server Config Environment Variables](#server-config-environment-variables)
-
-An example of the serverconfig.json file can be found in the GitHub repo for this image [Here](https://github.com/jsknnr/vintage-story-server/blob/main/container/example_serverconfig.json)
-
-If you do supply your own serverconfig.json file, pay particular attention to the paths in the config file like the path to the save file and where mods are stored.
-The correct values for those paths can be found in the example linked above.
-
-If you are mounting a serverconfig.json file into the container, make sure it has the correct permissions by modifying its user and group IDs to match the container:
-```bash
-sudo chown 10000:10000 /my/container/volume/path/data/serverconfig.json
-```
+If you absolutely require to run the process in the container as a gid/uid other than 10000, you can build your own image based on my dockerfile. Here is an example of how to do this.
 
 ### Updating Server
 The image is capable of updating itself, but not automatically. If a new version is released, just update the `GAME_VERSION` variable to match the new version and when the container starts it will update to the new version.
@@ -45,23 +29,67 @@ Additionally, you can manually install mods by dropping the mod zip file (do not
 Any mod that changes world gen, such as [Terra Prety](https://mods.vintagestory.at/terraprety) or [Plains and Valleys](https://mods.vintagestory.at/plainsandvalleys), should be in the Mods directory before the server runs for the first time or weird things can happen to the world. Pre-provisioning the `Mods` directory inside the `data` volume and seeding it with the zip file is one option.
 
 ### Becoming a Server Admin
-To grant the initial admin role to someone, you need to modify your `serverconfig.json` file parameter `"StartupCommands"` to something like `"StartupCommands": "/op playername"`.
+To grant the initial admin role to someone, you have 2 options:
 
-### Manually Editing Files Outside of the Container
-If you feel you must edit a file in the data volume from outside of the container, once you are done making your changes make sure the files have the correct ownership. Also, due to the secure permissions of the container, your user outside of the container may not have access to edit an existing file without first supplying `sudo` to any command against that file.
+1) You can to modify your `serverconfig.json` file parameter `"StartupCommands"` to something like `"StartupCommands": "/op playername"`.
+2) You can exec into the container and use the interactive terminal:
+  ```bash
+  # docker
+  docker exec -it my-vintage-story-container bash -c "supervisorctl fg vintagestory"
+  # podman
+  podman exec -it my-vintage-story-container -- bash -c "supervisorctl fg vintagestory"
+  # kubernetes
+  kubernetes -n vintagestory exec -it vintage-story-server-guid -- bash -c "supervisorctl fg vintagestory"
+  # where '-n' is the namespace the pod lives in and 'guid' is the pods unique guid that is generated on creation
+  ```
+  From here you can run `/op playername` or any of the server terminal commands. I should note that you will not see the output as it is getting swallowed by supervisor. To see the output follow the container log in a separate terminal window, for example: `docker logs -f my-vintage-story-container`
 
-example editing a file:
+### Manually Modifying Files Outside of the Container
+Modifying files in a volume from outside of the container can modify permissions of the file and cause Vintage Story to not be able to read the file. If you do this, be sure to reset permissions on any file you add or modify in the file: `sudo chown 10000:10000 my_modified_or_added_file`
+
+### Manually Modifying Files Inside of the Container and Using Vintage Story Admin Terminal
+If you need to manually modify files it is best to do it from within the container. The container has `vim` as a text editor for modifying things like config files and `wget` to be able to download files from the internet. Here are a few examples:
 ```bash
-sudo vi /my/container/volume/path/data/serverconfig.json
+# manually editing the serverconfig.json file from within the container and restarting the process
+docker exec -it my-vintage-story-container bash
+cd data
+vi serverconfig.json
+supervisorctl restart vintagestory
+# manually downloading a mod from vintage story moddb
+docker exec -it my-vintage-story-container bash
+cd data/Mods
+wget --content-disposition https://mods.vintagestory.at/download?fileid=21975
+supervisorctl restart vintagestory
+# accessing the Vintage Story admin terminal
+docker exec -it my-vintage-story-container bash
+supervisorctl fg vintagestory
+/op playername
+/moddb install playercorpse
+/whitelist playername
+# you can also gain access to the admin terminal directly
+docker exec -it my-vintage-story-container bash -c "supervisorctl fg vintagestory"
 ```
 
-example setting correct permission on created and edited files:
+### On Your Quest for the Perfect World
+If you are like me, you spend a stupid amount of time generating worlds looking for the perfect one. There is an easier way to do this without recreating the whole container, especially if you use worldgen mods that must be loaded into `data/Mods` before the server process runs for the first time on a given world.
 ```bash
-sudo chown 10000:10000 /my/container/volume/path/data/serverconfig.json
+# exec into the container
+docker exec -it my-vintage-story-container bash
+# stop the server process
+supervisorctl stop vintagestory
+# delete your current save - this will not remove config files, backups, or mods that have already been downloaded
+rm -f ./data/Saves/*
+# start the server process
+supervisorctl start vintagestory
+# alternatively, here is a 1 liner
+docker exec -it my-vintage-story-container bash -c "supervisorctl stop vintagestory && rm -f /home/vintagestory/data/Saves/* && supervisorctl start vintagestory"
 ```
+Now you can log back into your server and see if this is the world for you and your group.
+
+## Running the Container
 
 ### Ports
-Game Port is specified in serverconfig.json
+Game Port is specified in serverconfig.json. Game versions > 1.19 require TCP and UDP.
 
 | Port      | Protocol | Default |
 |-----------|----------|---------|
@@ -77,6 +105,23 @@ Game Port is specified in serverconfig.json
 | BACKUP_CRON_SCHEDULE | When the daily backup script should run, expressed in a CRON format: [Example](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#sample_schedules) | "0 3 * * *" | False    |
 | BACKUP_RETENTION_DAYS| Number of days to keep backups                                              | 7         | False    |
 
+### serverconfig.json
+If you do not mount a serverconfig.json file into the container, then the container will build one for you.
+
+Most of the settings for the server are in `serverconfig.json` which exists at `/home/vintagestory/data/serverconfig.json` in the container. You can supply your own serverconfig.json by mounting it into the container in the method of your choosing.
+
+If the serverconfig.json file is not found during startup, the container will create one for you based on the variables you can define in [Server Config Environment Variables](#server-config-environment-variables)
+
+An example of the serverconfig.json file can be found in the GitHub repo for this image [Here](https://github.com/jsknnr/vintage-story-server/blob/main/container/example_serverconfig.json)
+
+If you do supply your own serverconfig.json file, pay particular attention to the paths in the config file like the path to the save file and where mods are stored.
+The correct values for those paths can be found in the example linked above.
+
+If you are mounting a serverconfig.json file into the container, make sure it has the correct permissions by modifying its user and group IDs to match the container:
+```bash
+sudo chown 10000:10000 /my/container/volume/path/data/serverconfig.json
+```
+Where `/my/container/volume/path/data` is the local path on your container host to where your serverconfig.json file is at that you wish to mount into the container.
 
 ### Server Config Environment Variables
 These variables are **all optional** and only necessary if you aren't bringing your own serverconfig.json and would like the container to generate one for you.
@@ -300,5 +345,3 @@ WantedBy=multi-user.target default.target
 ### Kubernetes
 
 I've built a Helm chart and have included it in the `helm` directory within this repo. Modify the `values.yaml` file to your liking and install the chart into your cluster. Be sure to create and specify a namespace as I did not include a template for provisioning a namespace.
-
-"/moddb install plainsandvalleys v1.19.8 \n /moddb install fromgoldencombs v1.19.8 \n /moddb install primitivesurvival v1.19.8 \n /moddb install expandedfoods v1.19.8 \n /moddb install aculinaryartillery v1.19.8 \n /moddb install millwright v1.19.8 \n /moddb install playercorpse v1.19.8"
