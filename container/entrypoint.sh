@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Quick function to generate a timestamp
 timestamp () {
