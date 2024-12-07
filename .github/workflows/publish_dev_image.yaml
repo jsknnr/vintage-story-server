@@ -1,12 +1,11 @@
 name: Build and Publish Development Image
-on: 
-  pull_request: 
-    branches: 
-    - dev 
-    types: 
-    - opened 
-    - synchronize 
-    - reopened
+on:
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        description: 'Branch name to build'
+        required: true
+        default: 'dev'
 jobs:
   build-push:
     runs-on: ubuntu-latest
@@ -25,6 +24,6 @@ jobs:
           file: Containerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/vintage-story-server:unstable-dev
+            ${{ secrets.DOCKERHUB_USERNAME }}/vintage-story-server:devel
           build-args: |
-            IMAGE_VERSION=${{ ${{ github.sha }} }}
+            IMAGE_VERSION=${{ ${{ github.sha }} }}-devel

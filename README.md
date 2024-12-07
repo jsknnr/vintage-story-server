@@ -40,10 +40,12 @@ The container will backup the data directory daily. The backups will be created 
 
 ### Mods
 Server admins can install mods with server commands as documented [Here](https://wiki.vintagestory.at/Special:MyLanguage/List_of_server_commands#/moddb)
-Additionally, you can manually install mods by dropping the mod zip file (do not unzip) in `data/Mods` either from within the container (search "how to exec into container") or if you have access to the volume outside of the container, you can do it that way as well. If a mod also has a config file, they are stored at `data/ModConfig`.
+Additionally, you can manually install mods by dropping the mod zip file (do not unzip) in `data/Mods` either from within the container (search "how to exec into container") or if you have access to the volume outside of the container, you can do it that way as well. If a mod also has a config file, they are stored at `data/ModConfig`. If a mod is installed while the server is running, it will need restarted to take effect.
+
+Any mod that changes world gen, such as [Terra Prety](https://mods.vintagestory.at/terraprety) or [Plains and Valleys](https://mods.vintagestory.at/plainsandvalleys), should be in the Mods directory before the server runs for the first time or weird things can happen to the world. Pre-provisioning the `Mods` directory inside the `data` volume and seeding it with the zip file is one option.
 
 ### Becoming a Server Admin
-To grant the initial admin role to someone, you need to modify your `serverconfig.json` file parameter `"StartupCommands"` to something like `"StartupCommands": "/op playername"`. From here, additional admin roles can be granted from the first admin.
+To grant the initial admin role to someone, you need to modify your `serverconfig.json` file parameter `"StartupCommands"` to something like `"StartupCommands": "/op playername"`.
 
 ### Manually Editing Files Outside of the Container
 If you feel you must edit a file in the data volume from outside of the container, once you are done making your changes make sure the files have the correct ownership. Also, due to the secure permissions of the container, your user outside of the container may not have access to edit an existing file without first supplying `sudo` to any command against that file.
