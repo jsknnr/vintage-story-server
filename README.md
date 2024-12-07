@@ -94,6 +94,7 @@ These variables only work when creating a new serverconfig.json, they do not mod
 | maxPlayers                | Maximum number of concurrent players                                                                                   | 16                                            |
 | password                  | Password protects the server if specified                                                                              | ""                                            |
 | mapSizeX                  | World X (width) axis size in blocks                                                                                    | 1024000                                       |
+| mapSizeY                  | World Y (height) axis size in blocks                                                                                   | 256                                           |
 | mapSizeZ                  | World Z (length) axis size in blocks                                                                                   | 1024000                                       |
 | serverLanguage            | Language for server                                                                                                    | "en"                                          |
 | seed                      | Seed to use for world generation                                                                                       | ""                                            |

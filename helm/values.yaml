@@ -43,6 +43,7 @@ serverConfig:
   password: ""
   mapSizeX: 1024000
   mapSizeZ: 1024000
+  mapSizeY: 256
   serverLanguage: "en"
   seed: ""
   worldName: "Our Little World"
