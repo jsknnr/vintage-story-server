@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Quick function to generate a timestamp
 timestamp () {
@@ -43,7 +44,7 @@ if ! [ -f "${VINTAGE_STORY_PATH}/server/VERSION" ]; then
     echo "${GAME_VERSION}" > "${VINTAGE_STORY_PATH}/server/VERSION"
 elif [ $(cat ${VINTAGE_STORY_PATH}/server/VERSION) != "$GAME_VERSION" ]; then
     echo "$(timestamp) INFO: Current Vintage Story server version does not match version ${GAME_VERSION}, updating"
-    wget https://cdn.vintagestory.at/gamefiles/stable/vs_server_linux-x64_${GAME_VERSION}.tar.gz
+    wget https://cdn.vintagestory.at/gamefiles/${GAME_BRANCH,,}/vs_server_linux-x64_${GAME_VERSION}.tar.gz
     rm -rf "${VINTAGE_STORY_PATH}/server/*"
     tar xzf vs_server_linux-x64_${GAME_VERSION}.tar.gz -C "${VINTAGE_STORY_PATH}/server"
     echo "${GAME_VERSION}" > "${VINTAGE_STORY_PATH}/server/VERSION"
