@@ -110,4 +110,4 @@ serverConfig:
   allowPvP: true
   allowFireSpread: true
   allowFallingBlocks: true
-  startupCommands: ""
+  startupCommands: null
