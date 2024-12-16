@@ -418,7 +418,7 @@ data:
       "AllowFallingBlocks": {{ .Values.serverConfig.allowFallingBlocks }},
       "HostedMode": false,
       "HostedModeAllowMods": false,
-      "StartupCommands": {{ .Values.serverConfig.startupCommands }},
+      "StartupCommands": {{ if .Values.serverConfig.startupCommands }}{{ .Values.serverConfig.startupCommands }}{{ else }}null{{ end }},
       "RepairMode": false,
       "AnalyzeMode": false,
       "CorruptionProtection": true,

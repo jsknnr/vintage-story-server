@@ -110,4 +110,5 @@ serverConfig:
   allowPvP: true
   allowFireSpread: true
   allowFallingBlocks: true
-  startupCommands: null
+  # startup commands should be separated by return and must be escaped (double slash) e.g, "/op playername\\n/whitelist off\\n/moddb install playercorpse"
+  startupCommands: ""
