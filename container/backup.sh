@@ -1,6 +1,6 @@
 #!/bin/bash
 # Backup datestamp variable
-DATESTAMP=$(date +\%Y\%m\%d)
+DATESTAMP=$(date +"%Y%m%d-%H%M%S%3N")
 
 # Stop Vintage Story
 echo "Stopping Vintage Story server process to perform backup"
