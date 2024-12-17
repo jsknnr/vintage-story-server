@@ -25,7 +25,7 @@ jobs:
       - name: Build and Publish
         uses: docker/build-push-action@v6
         with:
-          context: "$GITHUB_WORKSPACE/container"
+          context: "${{ GITHUB_WORKSPACE }}/container"
           file: Containerfile
           push: true
           tags: |
