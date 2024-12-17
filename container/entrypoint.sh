@@ -42,12 +42,14 @@ if ! [ -f "${VINTAGE_STORY_PATH}/server/VERSION" ]; then
     wget https://cdn.vintagestory.at/gamefiles/${GAME_BRANCH,,}/vs_server_linux-x64_${GAME_VERSION}.tar.gz
     tar xzf vs_server_linux-x64_${GAME_VERSION}.tar.gz -C "${VINTAGE_STORY_PATH}/server"
     echo "${GAME_VERSION}" > "${VINTAGE_STORY_PATH}/server/VERSION"
+    rm -f vs_server_linux-x64_${GAME_VERSION}.tar.gz
 elif [ $(cat ${VINTAGE_STORY_PATH}/server/VERSION) != "$GAME_VERSION" ]; then
     echo "$(timestamp) INFO: Current Vintage Story server version does not match version ${GAME_VERSION}, updating"
+    rm -rfv ${VINTAGE_STORY_PATH}/server/*
     wget https://cdn.vintagestory.at/gamefiles/${GAME_BRANCH,,}/vs_server_linux-x64_${GAME_VERSION}.tar.gz
-    rm -rf "${VINTAGE_STORY_PATH}/server/*"
-    tar xzf vs_server_linux-x64_${GAME_VERSION}.tar.gz -C "${VINTAGE_STORY_PATH}/server"
-    echo "${GAME_VERSION}" > "${VINTAGE_STORY_PATH}/server/VERSION"
+    tar xzf vs_server_linux-x64_${GAME_VERSION}.tar.gz -C ${VINTAGE_STORY_PATH}/server
+    echo "${GAME_VERSION}" > ${VINTAGE_STORY_PATH}/server/VERSION
+    rm -f vs_server_linux-x64_${GAME_VERSION}.tar.gz
 else
     echo "$(timestamp) INFO: Vintage Story server version ${GAME_VERSION} already present"
 fi
