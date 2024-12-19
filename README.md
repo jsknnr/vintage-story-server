@@ -39,8 +39,7 @@ To grant the initial admin role to someone, you have 2 options:
   # podman
   podman exec -it my-vintage-story-container -- bash -c "supervisorctl fg vintagestory"
   # kubernetes
-  kubernetes -n vintagestory exec -it vintage-story-server-guid -- bash -c "supervisorctl fg vintagestory"
-  # where '-n' is the namespace the pod lives in and 'guid' is the pods unique guid that is generated on creation
+  kubectl -n vintagestory exec -it deploy/vintage-story-server -- bash -c "supervisorctl fg vintagestory"
   ```
   From here you can run `/op playername` or any of the server terminal commands. I should note that you will not see the output as it is getting swallowed by supervisor. To see the output follow the container log in a separate terminal window, for example: `docker logs -f my-vintage-story-container`
 
@@ -102,7 +101,7 @@ Game Port is specified in serverconfig.json. Game versions > 1.19 UDP as well as
 |----------------------|-----------------------------------------------------------------------------|-----------|----------|
 | GAME_VERSION         | Version of Vintage Story server to run                                      | "1.19.8"  | False    |
 | GAME_BRANCH          | Which branch to pull server files from, "stable" or "unstable"              | "stable"  | False    |
-| BACKUP_CRON_SCHEDULE | When the daily backup script should run, expressed in a CRON format: [Example](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#sample_schedules) | "0 3 * * *" | False    |
+| BACKUP_CRON_SCHEDULE | When the backup script should run, expressed in a CRON format: [Example](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#sample_schedules) Default is daily at 3 AM server time | "0 3 * * *" | False    |
 | BACKUP_RETENTION_DAYS| Number of days to keep backups                                              | 7         | False    |
 
 ### serverconfig.json
