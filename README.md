@@ -39,8 +39,7 @@ To grant the initial admin role to someone, you have 2 options:
   # podman
   podman exec -it my-vintage-story-container -- bash -c "supervisorctl fg vintagestory"
   # kubernetes
-  kubernetes -n vintagestory exec -it vintage-story-server-guid -- bash -c "supervisorctl fg vintagestory"
-  # where '-n' is the namespace the pod lives in and 'guid' is the pods unique guid that is generated on creation
+  kubectl -n vintagestory exec -it deploy/vintage-story-server -- bash -c "supervisorctl fg vintagestory"
   ```
   From here you can run `/op playername` or any of the server terminal commands. I should note that you will not see the output as it is getting swallowed by supervisor. To see the output follow the container log in a separate terminal window, for example: `docker logs -f my-vintage-story-container`
 
