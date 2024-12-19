@@ -101,7 +101,7 @@ Game Port is specified in serverconfig.json. Game versions > 1.19 UDP as well as
 |----------------------|-----------------------------------------------------------------------------|-----------|----------|
 | GAME_VERSION         | Version of Vintage Story server to run                                      | "1.19.8"  | False    |
 | GAME_BRANCH          | Which branch to pull server files from, "stable" or "unstable"              | "stable"  | False    |
-| BACKUP_CRON_SCHEDULE | When the daily backup script should run, expressed in a CRON format: [Example](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#sample_schedules) | "0 3 * * *" | False    |
+| BACKUP_CRON_SCHEDULE | When the backup script should run, expressed in a CRON format: [Example](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#sample_schedules) Default is daily at 3 AM server time | "0 3 * * *" | False    |
 | BACKUP_RETENTION_DAYS| Number of days to keep backups                                              | 7         | False    |
 
 ### serverconfig.json
