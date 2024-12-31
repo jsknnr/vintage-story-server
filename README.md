@@ -274,7 +274,7 @@ services:
       - "42420:42420/tcp"
       - "42420:42420/udp"
     environment:
-      - GAME_VERSION='1.19.8'
+      - GAME_VERSION=1.19.8
     volumes:
       - vintage-story-data:/home/vintagestory/data
       - vintage-story-server:/home/vintagestory/server
