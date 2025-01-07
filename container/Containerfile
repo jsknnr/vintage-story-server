@@ -26,6 +26,7 @@ RUN groupadd -g $CONTAINER_GID vintagestory \
         libicu72 \
         supervisor \
         jq \
+        lsof \
         vim \
     && wget "$DOTNET_RUNTIME" \
     && mkdir "$DOTNET_PATH" \
