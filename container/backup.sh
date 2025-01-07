@@ -21,7 +21,7 @@ done
 
 # Compress the backup to save some space
 echo "Compressing backup"
-tar czf ${VINTAGE_STORY_PATH}/data/Backups/server_backup_${DATESTAMP}.tar.gz -C ${VINTAGE_STORY_PATH}/data/Backups/backup_${DATESTAMP}.vcdbs
+tar czf "${VINTAGE_STORY_PATH}/data/Backups/server_backup_${DATESTAMP}.tar.gz" -C "${VINTAGE_STORY_PATH}/data/Backups" "backup_${DATESTAMP}.vcdbs"
 
 echo "Backup server_backup_${DATESTAMP}.tar.gz created"
 
