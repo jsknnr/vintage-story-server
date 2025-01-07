@@ -20,7 +20,9 @@ The image is capable of updating itself, but not automatically. If a new version
 To restart the server it is safe to stop and start the container. The stop process will gracefully stop the Vintage Story server process and initiate a save before closing.
 
 ### Backups
-The container will backup the data directory daily. The backups will be created at `/home/vintagestory/data/Backups` and the backup script will ignore this specific directory so you don't backup your backups. By default this will run at 3 AM (03:00) **server time** and keep 7 days worth of backups. To configure the schedule and the retention policy (days to keep), refer to [Environment Variables](#environment-variables)
+By default the container will issue the server /genbackup command **daily**. The backups will be created at `/home/vintagestory/data/Backups`. By default this will run at 3 AM (03:00) **server time** which is typically UTC and keep 7 days worth of backups. To configure the schedule and the retention policy (days to keep), refer to [Environment Variables](#environment-variables)
+
+Backups can be quite large. As part of the backup process, I use GZIP compression and create an archive of each backup file which ends up being around 1/4 of the original size in my tests. With that said, a days worth of backups done hourly could be well over 1GB per day. Keep that in mind.
 
 ### Mods
 Server admins can install mods with server commands as documented [Here](https://wiki.vintagestory.at/Special:MyLanguage/List_of_server_commands#/moddb)
@@ -101,8 +103,9 @@ Game Port is specified in serverconfig.json. Game versions > 1.19 UDP as well as
 |----------------------|-----------------------------------------------------------------------------|-----------|----------|
 | GAME_VERSION         | Version of Vintage Story server to run                                      | "1.19.8"  | False    |
 | GAME_BRANCH          | Which branch to pull server files from, "stable" or "unstable"              | "stable"  | False    |
-| BACKUP_CRON_SCHEDULE | When the backup script should run, expressed in a CRON format: [Example](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#sample_schedules) Default is daily at 3 AM server time | "0 3 * * *" | False    |
-| BACKUP_RETENTION_DAYS| Number of days to keep backups                                              | 7         | False    |
+| BACKUP_CRON_SCHEDULE | When the backup script should run, expressed in a CRON format: [Example](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#sample_schedules) Default is daily at 3 AM server time (typically UTC) | "0 3 * * *" | False    |
+| BACKUP_RETENTION_DAYS | Number of days to keep backups (warning, backups can be quite large)                                             | 7         | False    |
+| BACKUP_RETENTION_MINUTES | Number of minutes to keep backups. Useful for aggressive backup schedules. Only define minutes or days. Supersedes BACKUP_RETENTION_DAYS. | not defined | False |
 
 ### serverconfig.json
 If you do not mount a serverconfig.json file into the container, then the container will build one for you.
