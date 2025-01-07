@@ -27,5 +27,10 @@ echo "Backup server_backup_${DATESTAMP}.tar.gz created"
 rm -f ${VINTAGE_STORY_PATH}/data/Backups/backup_${DATESTAMP}.vcdbs
 
 # Remove older backups
-echo "Cleaning up previous backups older than ${BACKUP_RETENTION_DAYS} days"
-find ${VINTAGE_STORY_PATH}/data/Backups -name "server_backup_*.tar.gz" -type f -mtime +$BACKUP_RETENTION_DAYS -exec rm -f {} \;
+if [[ -z "${BACKUP_RETENTION_MINUTES}" ]]; then
+    echo "Cleaning up previous backups older than ${BACKUP_RETENTION_DAYS} days"
+    find "${VINTAGE_STORY_PATH}/data/Backups" -name "server_backup_*.tar.gz" -type f -mtime +${BACKUP_RETENTION_DAYS} -exec rm -f {} \;
+else
+    echo "Cleaning up previous backups older than ${BACKUP_RETENTION_MINUTES} minutes"
+    find "${VINTAGE_STORY_PATH}/data/Backups" -name "server_backup_*.tar.gz" -type f -mmin +${BACKUP_RETENTION_MINUTES} -exec rm -f {} \;
+fi
