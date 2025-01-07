@@ -3,7 +3,7 @@ DATESTAMP=$(date +"%Y-%m-%d-%H-%M-%S")
 VS_PID=$(supervisorctl pid vintagestory)
 
 # Issue backup command to stdin of VS pid
-echo "/genbackup backup_${DATESTAMP}.vcdbs" > /proc/${vs_pid}/fd/0
+echo "/genbackup backup_${DATESTAMP}.vcdbs" > /proc/${VS_PID}/fd/0
 
 # Wait for our file to exist
 while [ ! -f "${VINTAGE_STORY_PATH}/data/Backups/backup_${DATESTAMP}.vcdbs" ]; do
