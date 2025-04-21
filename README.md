@@ -84,6 +84,8 @@ rm -f ./data/Saves/*
 supervisorctl start vintagestory
 # alternatively, here is a 1 liner
 docker exec -it my-vintage-story-container bash -c "supervisorctl stop vintagestory && rm -f /home/vintagestory/data/Saves/* && supervisorctl start vintagestory"
+# here is a 1 liner for kubernetes - make sure you set the correct namespace
+kubectl -n vintagestory exec -it deploy/vintage-story-server -- bash -c 'supervisorctl stop vintagestory && rm -f /home/vintagestory/data/Saves/* && rm -rf /home/vintagestory/data/Cache/* && supervisorctl start vintagestory'
 ```
 Now you can log back into your server and see if this is the world for you and your group.
 
