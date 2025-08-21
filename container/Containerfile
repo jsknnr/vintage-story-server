@@ -7,7 +7,7 @@ ARG CONTAINER_GID=10000
 ARG CONTAINER_UID=10000
 
 ARG SUPERCRONIC_BINARY="https://github.com/aptible/supercronic/releases/download/v0.2.33/supercronic-linux-amd64"
-ARG DOTNET_RUNTIME='https://download.visualstudio.microsoft.com/download/pr/09e67261-215a-4003-bcf8-f90d67dcd02b/b32cf12a5c10b1f74e21c8cb03880891/aspnetcore-runtime-7.0.20-linux-x64.tar.gz'
+ARG DOTNET_RUNTIME='https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/8.0.19/aspnetcore-runtime-8.0.19-linux-x64.tar.gz'
 
 ENV GAME_BRANCH='stable'
 ENV GAME_VERSION='1.19.8'
@@ -30,8 +30,8 @@ RUN groupadd -g $CONTAINER_GID vintagestory \
         vim \
     && wget "$DOTNET_RUNTIME" \
     && mkdir "$DOTNET_PATH" \
-    && tar xzf aspnetcore-runtime-7.0.20-linux-x64.tar.gz -C "$DOTNET_PATH" \
-    && rm -f aspnetcore-runtime-7.0.20-linux-x64.tar.gz \
+    && tar xzf aspnetcore-runtime-8.0.19-linux-x64.tar.gz -C "$DOTNET_PATH" \
+    && rm -f aspnetcore-runtime-8.0.19-linux-x64.tar.gz \
     && wget "$SUPERCRONIC_BINARY" \
     && chmod +x supercronic-linux-amd64 \
     && mv supercronic-linux-amd64 /usr/local/bin/supercronic \
