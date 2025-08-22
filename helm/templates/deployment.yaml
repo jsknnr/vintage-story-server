@@ -43,7 +43,7 @@ spec:
         {{- range $key, $val := .Values.serverConfig }}
         {{- if not (and (kindIs "string" $val) (eq $val "")) }}
         - name: {{ $key }}
-          value: {{ if isString $val }}{{ $val | quote }}{{ else if isBool $val }}{{ $val }}{{ else if isNumber $val }}{{ $val }}{{ end }}
+          value: {{ if eq (typeOf $val) "string" }}{{ $val | quote }}{{ else }}{{ $val }}{{ end }}
         {{- end }}
         {{- end }}
         ports:
