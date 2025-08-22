@@ -1,16 +1,15 @@
 # vintage-story-server
  
 [![Static Badge](https://img.shields.io/badge/DockerHub-blue)](https://hub.docker.com/r/sknnr/vintage-story-server) ![Docker Pulls](https://img.shields.io/docker/pulls/sknnr/vintage-story-server) [![Static Badge](https://img.shields.io/badge/GitHub-green)](https://github.com/jsknnr/vintage-story-server) ![GitHub Repo stars](https://img.shields.io/github/stars/jsknnr/vintage-story-server)
-
+Run Vintage Story dedicated server in a container. Optionally includes helm chart for running in Kubernetes.
 # Version 1.21 of Vintage Story uses DotNet 8
 All users:
-As of right now it is still a released candidate. In anticipation, my "devel" image tag contains the DotNet upgrade. 
+As of right now it is still a released candidate. In anticipation, my "devel" image tag contains the DotNet upgrade.
+<br>
 Kubernetes users:
 1.21 also appears to require the serverconfig.json file to be writable, so I had to remove the config map and handle building the serverconfig.json the same way as I do for non-Kubernetes users. You will not only want to use the "devel" image, but also the "dev" branch for the Helm charts.
-
-Once 1.21 leaves RC, I will merge these changes and release a new latest image. If you are using a pre 1.21 world, you will want to pin your container to my previous release
-
-Run Vintage Story dedicated server in a container. Optionally includes helm chart for running in Kubernetes.
+<br>
+Once 1.21 leaves RC, I will merge these changes and release a new latest image. If you are using a pre 1.21 world, you will want to pin your container image to my 1.2.0 release
 
 **Disclaimer:** This is not an official image. No support, implied or otherwise is offered to any end user by the author or anyone else. Feel free to do what you please with the contents of this repo.
 
