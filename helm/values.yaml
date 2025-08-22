@@ -107,6 +107,8 @@ serverConfig:
   classExclusiveRecipes: true
   auctionHouse: true
   onlyWhitelisted: false
+  # 1 for off
+  whitelistMode: 1
   allowPvP: true
   allowFireSpread: true
   allowFallingBlocks: true

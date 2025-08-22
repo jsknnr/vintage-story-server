@@ -210,6 +210,7 @@ These variables only work when creating a new serverconfig.json, they do not mod
 | classExclusiveRecipes     | If enabled, some recipes are only available to certain classes                                                         | true                                          |
 | auctionHouse              | Whether or not to allow global auction house at traders                                                                | true                                          |
 | onlyWhitelisted           | Only allow players to connect if on white list, not sure how this works, just use a password                           | false                                         |
+| whitelistMode             | Enable or disable WhiteList mode, set to 1 for off                                                                     | 1                                             |
 | allowPvP                  | Whether or not players can hurt each other                                                                             | true                                          |
 | allowFireSpread           | Whether or not to allow fire to spread when items are burning                                                          | true                                          |
 | allowFallingBlocks        | Whether or not to allow blocks to fall                                                                                 | true                                          |

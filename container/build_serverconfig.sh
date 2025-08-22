@@ -81,6 +81,7 @@ declare -A var_paths=(
   ["classExclusiveRecipes"]="WorldConfig.WorldConfiguration.classExclusiveRecipes"
   ["auctionHouse"]="WorldConfig.WorldConfiguration.auctionHouse"
   ["onlyWhitelisted"]="OnlyWhitelisted"
+  ["whitelistMode"]="WhitelistMode"
   ["allowPvP"]="AllowPvP"
   ["allowFireSpread"]="AllowFireSpread"
   ["allowFallingBlocks"]="AllowFallingBlocks"
