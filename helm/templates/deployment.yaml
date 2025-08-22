@@ -41,9 +41,11 @@ spec:
         - name: BACKUP_RETENTION_DAYS
           value: {{ .Values.config.backupRetentionDays | squote }}
         {{- range $key, $val := .Values.serverConfig }}
-        {{- if not (eq $val "") }}
-        - name: "{{ $key }}"
-          value: "{{ $val }}"
+        {{- $str := printf "%v" $val }}
+        {{- /* skip truly empty strings */}}
+        {{- if ne $str "" }}
+        - name: {{ $key }}
+          value: {{ $str | quote }}
         {{- end }}
         {{- end }}
         ports:
