@@ -92,25 +92,23 @@ declare -a jq_args=()
 filter=""
 
 for var in "${!var_paths[@]}"; do
-  val="${!var:-}"
+  val="${!var:-}"  
   [[ -z "$val" ]] && continue
 
-  path="${var_paths[$var]}"
-  # build or-joined filter
-  entry=".${path} = \$${var}"
-  if [[ -z "$filter" ]]; then
-    filter="$entry"
-  else
-    filter="$filter | $entry"
-  fi
-
-  # decide: number/bool --argjson, else --arg
-  if [[ "$val" =~ ^-?[0-9]+$ ]] ||
-     [[ "$val" == "true" || "$val" == "false" ]]; then
+  # Detect integers or scientific floats
+  if [[ "$val" =~ ^-?[0-9]+([eE][+-]?[0-9]+)?$ ]]; then
+    # Print as a plain integer (no exponent)
+    normalized=$(printf "%.0f" "$val")
+    jq_args+=( "--argjson" "$var" "$normalized" )
+  elif [[ "$val" == "true" || "$val" == "false" ]]; then
     jq_args+=( "--argjson" "$var" "$val" )
   else
     jq_args+=( "--arg" "$var" "$val" )
   fi
+
+  # Build the filter
+  [[ -z "$filter" ]] && filter=".${var_paths[$var]} = \$$var" \
+    || filter="$filter | .${var_paths[$var]} = \$$var"
 done
 
 # 4. Run jq in one shot
