@@ -40,6 +40,12 @@ spec:
           value: {{ .Values.config.backupCronSchedule | squote }}
         - name: BACKUP_RETENTION_DAYS
           value: {{ .Values.config.backupRetentionDays | squote }}
+        {{- range $key, $val := .Values.serverConfig }}
+        {{- if not (eq $val "") }}
+        - name: "{{ $key }}"
+          value: "{{ $val }}"
+        {{- end }}
+        {{- end }}
         ports:
         - name: game-port
           containerPort: {{ .Values.config.gamePort | int }}
@@ -56,9 +62,6 @@ spec:
         - name: backups
           mountPath: /home/vintagestory/data/Backups
 {{- end }}
-        - name: serverconfig
-          mountPath: /home/vintagestory/data/serverconfig.json
-          subPath: serverconfig.json
         securityContext:
           allowPrivilegeEscalation: false
       volumes:
@@ -73,6 +76,3 @@ spec:
         persistentVolumeClaim:
           claimName: "{{ .Chart.Name }}-backups"
 {{- end }}
-      - name: serverconfig
-        configMap:
-          name: serverconfig
