@@ -405,6 +405,7 @@
   "GroupChatHistorySize": 20,
   "MaxOwnedGroupChannelsPerUser": 10,
   "OnlyWhitelisted": false,
+  "WhitelistMode": 1,
   "VerifyPlayerAuth": true,
   "DefaultSpawn": null,
   "AllowPvP": true,
