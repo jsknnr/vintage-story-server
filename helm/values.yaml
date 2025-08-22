@@ -41,8 +41,8 @@ serverConfig:
   advertiseServer: true
   maxPlayers: 16
   password: ""
-  mapSizeX: 1024000
-  mapSizeZ: 1024000
+  mapSizeX: "1024000"
+  mapSizeZ: "1024000"
   mapSizeY: 256
   serverLanguage: "en"
   seed: ""
