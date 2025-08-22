@@ -1,8 +1,12 @@
-#!/bin/bash
-# This script dynamically builds a serverconfig.json from exmaple_serverconfig.json and sets attributes
-# based on supplied serverconfig environment variables
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Declare list of serverconfig env vars and their respective paths in serverconfig.json
+# 1. Paths to example and output JSON
+BASE="${VINTAGE_STORY_PATH}"
+INPUT="$BASE/example_serverconfig.json"
+OUTPUT="$BASE/data/serverconfig.json"
+
+# 2. Map of env-var names → JSON paths
 declare -A var_paths=(
   ["serverName"]="ServerName"
   ["serverDescription"]="ServerDescription"
@@ -13,7 +17,6 @@ declare -A var_paths=(
   ["password"]="Password"
   ["mapSizeX"]="MapSizeX"
   ["mapSizeZ"]="MapSizeZ"
-  ["mapSizeY"]="MapSizeY"
   ["mapSizeY"]="WorldConfig.MapSizeY"
   ["serverLanguage"]="ServerLanguage"
   ["seed"]="WorldConfig.Seed"
@@ -84,24 +87,33 @@ declare -A var_paths=(
   ["startupCommands"]="StartupCommands"
 )
 
-# Prepare jq command with dynamically added arguments
-jq_command="jq '"
-jq_args=""
+# 3. Build jq arguments and the update filter
+declare -a jq_args=()
+filter=""
 
-for var in "${!var_paths[@]}"
-do
-  if [ -n "${!var}" ]; then
-    jq_path="${var_paths[$var]}"
-    jq_command="$jq_command .$jq_path = \$$var |"
-    jq_args="$jq_args --arg $var $'${!var}'"
+for var in "${!var_paths[@]}"; do
+  val="${!var:-}"
+  [[ -z "$val" ]] && continue
+
+  path="${var_paths[$var]}"
+  # build or-joined filter
+  entry=".${path} = \$${var}"
+  if [[ -z "$filter" ]]; then
+    filter="$entry"
+  else
+    filter="$filter | $entry"
+  fi
+
+  # decide: number/bool --argjson, else --arg
+  if [[ "$val" =~ ^-?[0-9]+$ ]] ||
+     [[ "$val" == "true" || "$val" == "false" ]]; then
+    jq_args+=( "--argjson" "$var" "$val" )
+  else
+    jq_args+=( "--arg" "$var" "$val" )
   fi
 done
 
-# Set paths and remove the trailing '|' from the jq command
-jq_command="${jq_command% |}' ${VINTAGE_STORY_PATH}/example_serverconfig.json > ${VINTAGE_STORY_PATH}/data/serverconfig.json"
-
-# Combine jq command and arguments
-final_command="$jq_command $jq_args"
-
-# Run the jq command
-eval $final_command
+# 4. Run jq in one shot
+#    - ${jq_args[@]} injects all --arg/--argjson pairs
+#    - "$filter" is the combined update expression
+jq "${jq_args[@]}" "$filter" "$INPUT" > "$OUTPUT"
