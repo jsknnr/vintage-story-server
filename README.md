@@ -193,8 +193,8 @@ These variables only work when creating a new serverconfig.json, they do not mod
 | temporalGearRespawnUses   | How often you can use a temporal gear to reset your spawn point                                                        | "20"                                          |
 | temporalStormSleeping     | Whether or not you can sleep during a temporal storm                                                                   | "0"                                           |
 | worldClimate              | How climate distribution works, seasons are optimized for realistic                                                    | "realistic"                                   |
-| landcover                 | Percentage of world that should be land vs ocean                                                                       | "1"                                           |
-| oceanscale                | Percentage of ocean that should exist between land                                                                     | "1"                                           |
+| landcover                 | Percentage of world that should be land vs ocean                                                                       | "0.975"                                           |
+| oceanscale                | Percentage of ocean that should exist between land                                                                     | "5"                                           |
 | upheavelCommonness        | How common geologic upheaval should be (produces large scale hilly terrain)                                            | "0.3"                                         |
 | geologicActivity          | Undocumented but I believe affects lava flow                                                                           | "0.05"                                        |
 | landformScale             | Shapes the terrain and determines where lakes, mountains, forests, etc are formed (larger value makes these landforms larger) | "1.0"                                         |
