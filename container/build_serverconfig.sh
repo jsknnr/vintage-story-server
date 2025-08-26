@@ -1,8 +1,12 @@
-#!/bin/bash
-# This script dynamically builds a serverconfig.json from exmaple_serverconfig.json and sets attributes
-# based on supplied serverconfig environment variables
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Declare list of serverconfig env vars and their respective paths in serverconfig.json
+# 1. Paths to example and output JSON
+BASE="${VINTAGE_STORY_PATH}"
+INPUT="$BASE/example_serverconfig.json"
+OUTPUT="$BASE/data/serverconfig.json"
+
+# 2. Map of env-var names → JSON paths
 declare -A var_paths=(
   ["serverName"]="ServerName"
   ["serverDescription"]="ServerDescription"
@@ -13,7 +17,6 @@ declare -A var_paths=(
   ["password"]="Password"
   ["mapSizeX"]="MapSizeX"
   ["mapSizeZ"]="MapSizeZ"
-  ["mapSizeY"]="MapSizeY"
   ["mapSizeY"]="WorldConfig.MapSizeY"
   ["serverLanguage"]="ServerLanguage"
   ["seed"]="WorldConfig.Seed"
@@ -78,30 +81,38 @@ declare -A var_paths=(
   ["classExclusiveRecipes"]="WorldConfig.WorldConfiguration.classExclusiveRecipes"
   ["auctionHouse"]="WorldConfig.WorldConfiguration.auctionHouse"
   ["onlyWhitelisted"]="OnlyWhitelisted"
+  ["whitelistMode"]="WhitelistMode"
   ["allowPvP"]="AllowPvP"
   ["allowFireSpread"]="AllowFireSpread"
   ["allowFallingBlocks"]="AllowFallingBlocks"
   ["startupCommands"]="StartupCommands"
 )
 
-# Prepare jq command with dynamically added arguments
-jq_command="jq '"
-jq_args=""
+# 3. Build jq arguments and the update filter
+declare -a jq_args=()
+filter=""
 
-for var in "${!var_paths[@]}"
-do
-  if [ -n "${!var}" ]; then
-    jq_path="${var_paths[$var]}"
-    jq_command="$jq_command .$jq_path = \$$var |"
-    jq_args="$jq_args --arg $var $'${!var}'"
+for var in "${!var_paths[@]}"; do
+  val="${!var:-}"  
+  [[ -z "$val" ]] && continue
+
+  # Detect integers or scientific floats
+  if [[ "$val" =~ ^-?[0-9]+([eE][+-]?[0-9]+)?$ ]]; then
+    # Print as a plain integer (no exponent)
+    normalized=$(printf "%.0f" "$val")
+    jq_args+=( "--argjson" "$var" "$normalized" )
+  elif [[ "$val" == "true" || "$val" == "false" ]]; then
+    jq_args+=( "--argjson" "$var" "$val" )
+  else
+    jq_args+=( "--arg" "$var" "$val" )
   fi
+
+  # Build the filter
+  [[ -z "$filter" ]] && filter=".${var_paths[$var]} = \$$var" \
+    || filter="$filter | .${var_paths[$var]} = \$$var"
 done
 
-# Set paths and remove the trailing '|' from the jq command
-jq_command="${jq_command% |}' ${VINTAGE_STORY_PATH}/example_serverconfig.json > ${VINTAGE_STORY_PATH}/data/serverconfig.json"
-
-# Combine jq command and arguments
-final_command="$jq_command $jq_args"
-
-# Run the jq command
-eval $final_command
+# 4. Run jq in one shot
+#    - ${jq_args[@]} injects all --arg/--argjson pairs
+#    - "$filter" is the combined update expression
+jq "${jq_args[@]}" "$filter" "$INPUT" > "$OUTPUT"
