@@ -46,7 +46,7 @@ spec:
         {{- $str := printf "%v" $val }}
         {{- if ne $str "" }}
         - name: {{ $key }}
-          value: {{- if eq $key "startupCommands" }}{{ $val }}{{- else }}{{ $val | quote }}{{- end }}
+          value: {{- if eq $key "startupCommands" }}{{ print " " $val }}{{- else }}{{ print " " ($val | quote) }}{{- end }}
         {{- end }}
         {{- end }}
         ports:
