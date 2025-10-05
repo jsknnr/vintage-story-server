@@ -4,17 +4,6 @@
 
 Run Vintage Story dedicated server in a container. Optionally includes helm chart for running in Kubernetes.
 
-# Version 1.21 of Vintage Story uses DotNet 8
-All users:
-As of right now it is still a released candidate. In anticipation, my "devel" image tag contains the DotNet upgrade.
-<br>
-<br>
-Kubernetes users:
-1.21 also appears to require the serverconfig.json file to be writable, so I had to remove the config map and handle building the serverconfig.json the same way as I do for non-Kubernetes users. You will not only want to use the "devel" image, but also the "dev" branch for the Helm charts.
-<br>
-<br>
-Once 1.21 leaves RC, I will merge these changes and release a new latest image. If you are using a pre 1.21 world, you will want to pin your container image to my 1.2.0 release
-
 **Disclaimer:** This is not an official image. No support, implied or otherwise is offered to any end user by the author or anyone else. Feel free to do what you please with the contents of this repo.
 
 ## Managing the Container
@@ -113,7 +102,7 @@ Game Port is specified in serverconfig.json. Game versions > 1.19 UDP as well as
 
 | Name                 | Description                                                                 | Default   | Required |
 |----------------------|-----------------------------------------------------------------------------|-----------|----------|
-| GAME_VERSION         | Version of Vintage Story server to run                                      | "1.19.8"  | False    |
+| GAME_VERSION         | Version of Vintage Story server to run                                      | "1.21.2"  | False    |
 | GAME_BRANCH          | Which branch to pull server files from, "stable" or "unstable"              | "stable"  | False    |
 | BACKUP_CRON_SCHEDULE | When the backup script should run, expressed in a CRON format: [Example](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#sample_schedules) Default is daily at 3 AM server time (typically UTC) | "0 3 * * *" | False    |
 | BACKUP_RETENTION_DAYS | Number of days to keep backups (warning, backups can be quite large)                                             | 7         | False    |
@@ -241,7 +230,7 @@ docker run \
   --mount type=bind,source=/my/local/path/to/serverconfig.json,target=/home/vintagestory/data/serverconfig.json \
   --publish 42420:42420/tcp \
   --publish 42420:42420/udp \
-  --env=GAME_VERSION='1.19.8' \
+  --env=GAME_VERSION='1.21.2' \
   --env=GAME_BRANCH='stable' \
   sknnr/vintage-story-server:latest
 ```
@@ -255,7 +244,7 @@ docker run \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
   --publish 42420:42420/tcp \
   --publish 42420:42420/udp \
-  --env=GAME_VERSION='1.19.8' \
+  --env=GAME_VERSION='1.21.2' \
   --env=GAME_BRANCH='stable' \
   --env=serverName='My Really Cool Vintage Story Server' \
   --env=password='supersecretpasswordtojoinmycoolserver' \
@@ -290,7 +279,7 @@ services:
       - "42420:42420/tcp"
       - "42420:42420/udp"
     environment:
-      - GAME_VERSION=1.19.8
+      - GAME_VERSION=1.21.2
     volumes:
       - vintage-story-data:/home/vintagestory/data
       - vintage-story-server:/home/vintagestory/server
@@ -313,7 +302,7 @@ podman run \
   --mount type=bind,source=/my/local/path/to/serverconfig.json,target=/home/vintagestory/data/serverconfig.json \
   --publish 42420:42420/tcp \
   --publish 42420:42420/udp \
-  --env=GAME_VERSION='1.19.8' \
+  --env=GAME_VERSION='1.21.2' \
   docker.io/sknnr/vintage-story-server:latest
 ```
 
@@ -326,7 +315,7 @@ podman run \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
   --publish 42420:42420/tcp \
   --publish 42420:42420/udp \
-  --env=GAME_VERSION='1.19.8' \
+  --env=GAME_VERSION='1.21.2' \
   --env=GAME_BRANCH='stable' \
   --env=serverName='My Really Cool Vintage Story Server' \
   --env=password='supersecretpasswordtojoinmycoolserver' \
@@ -350,7 +339,7 @@ Volume=vintage-story-server:/home/vintagestory/server
 PublishPort=42420:42420/tcp
 PublishPort=42420:42420/udp
 ContainerName=vintage-story-server
-Environment=GAME_VERSION="1.19.8"
+Environment=GAME_VERSION="1.21.2"
 
 [Service]
 # Restart service when sleep finishes

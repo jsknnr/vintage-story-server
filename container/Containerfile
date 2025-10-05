@@ -10,7 +10,7 @@ ARG SUPERCRONIC_BINARY="https://github.com/aptible/supercronic/releases/download
 ARG DOTNET_RUNTIME='https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/8.0.19/aspnetcore-runtime-8.0.19-linux-x64.tar.gz'
 
 ENV GAME_BRANCH='stable'
-ENV GAME_VERSION='1.19.8'
+ENV GAME_VERSION='1.21.2'
 ENV BACKUP_RETENTION_DAYS=7
 ENV BACKUP_CRON_SCHEDULE='0 3 * * *'
 
