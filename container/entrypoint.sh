@@ -67,6 +67,9 @@ if [ ! -f "${VINTAGE_STORY_PATH}/data/serverconfig.json" ]; then
     echo "$(timestamp) INFO: serverconfig.json not found at ${VINTAGE_STORY_PATH}/data/serverconfig.json"
     echo "$(timestamp) INFO: Generating new serverconfig.json"
     ${VINTAGE_STORY_PATH}/build_serverconfig.sh
+elif [ "${REGENERATE_CONFIG}" = "true" ]; then
+    echo "$(timestamp) INFO: REGENERATE_CONFIG is true, regenerating serverconfig.json"
+    ${VINTAGE_STORY_PATH}/build_serverconfig.sh
 else
     echo "$(timestamp) INFO: Found serverconfig.json at ${VINTAGE_STORY_PATH}/data/serverconfig.json"
 fi

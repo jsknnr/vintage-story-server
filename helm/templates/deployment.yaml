@@ -40,6 +40,8 @@ spec:
           value: {{ .Values.config.backupCronSchedule | squote }}
         - name: BACKUP_RETENTION_DAYS
           value: {{ .Values.config.backupRetentionDays | squote }}
+        - name: REGENERATE_CONFIG
+          value: {{ .Values.config.regenerateConfig | squote }}
         {{- range $key, $val := .Values.serverConfig }}
         {{- $str := printf "%v" $val }}
         {{- if ne $str "" }}
