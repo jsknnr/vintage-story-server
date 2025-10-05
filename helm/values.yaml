@@ -24,7 +24,7 @@ volumes:
     storageClassName: ""
 
 config:
-  gameVersion: "1.19.8"
+  gameVersion: "1.21.2"
   gameBranch: "stable"
   gamePort: 42420
   backupCronSchedule: "0 3 * * *"
