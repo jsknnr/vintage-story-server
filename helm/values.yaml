@@ -27,6 +27,7 @@ config:
   gameVersion: "1.21.2"
   gameBranch: "stable"
   gamePort: 42420
+  regenerateConfig: "false"
   backupCronSchedule: "0 3 * * *"
   backupRetentionDays: "7"
 
