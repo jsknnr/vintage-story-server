@@ -24,7 +24,7 @@ volumes:
     storageClassName: ""
 
 config:
-  gameVersion: "1.21.2"
+  gameVersion: "1.21.4"
   gameBranch: "stable"
   gamePort: 42420
   regenerateConfig: "false"

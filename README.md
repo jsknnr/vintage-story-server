@@ -102,7 +102,7 @@ Game Port is specified in serverconfig.json. Game versions > 1.19 UDP as well as
 
 | Name                 | Description                                                                 | Default   | Required |
 |----------------------|-----------------------------------------------------------------------------|-----------|----------|
-| GAME_VERSION         | Version of Vintage Story server to run                                      | "1.21.2"  | False    |
+| GAME_VERSION         | Version of Vintage Story server to run                                      | "1.21.4"  | False    |
 | GAME_BRANCH          | Which branch to pull server files from, "stable" or "unstable"              | "stable"  | False    |
 | REGENERATE_CONFIG    | If set to true, will regenerate serverconfig.json from environment variables even if there is an existing serverconfig.json | 'faslse' | False |
 | BACKUP_CRON_SCHEDULE | When the backup script should run, expressed in a CRON format: [Example](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#sample_schedules) Default is daily at 3 AM server time (typically UTC) | "0 3 * * *" | False    |
@@ -231,7 +231,7 @@ docker run \
   --mount type=bind,source=/my/local/path/to/serverconfig.json,target=/home/vintagestory/data/serverconfig.json \
   --publish 42420:42420/tcp \
   --publish 42420:42420/udp \
-  --env=GAME_VERSION='1.21.2' \
+  --env=GAME_VERSION='1.21.4' \
   --env=GAME_BRANCH='stable' \
   sknnr/vintage-story-server:latest
 ```
@@ -245,7 +245,7 @@ docker run \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
   --publish 42420:42420/tcp \
   --publish 42420:42420/udp \
-  --env=GAME_VERSION='1.21.2' \
+  --env=GAME_VERSION='1.21.4' \
   --env=GAME_BRANCH='stable' \
   --env=serverName='My Really Cool Vintage Story Server' \
   --env=password='supersecretpasswordtojoinmycoolserver' \
@@ -280,7 +280,7 @@ services:
       - "42420:42420/tcp"
       - "42420:42420/udp"
     environment:
-      - GAME_VERSION=1.21.2
+      - GAME_VERSION=1.21.4
     volumes:
       - vintage-story-data:/home/vintagestory/data
       - vintage-story-server:/home/vintagestory/server
@@ -303,7 +303,7 @@ podman run \
   --mount type=bind,source=/my/local/path/to/serverconfig.json,target=/home/vintagestory/data/serverconfig.json \
   --publish 42420:42420/tcp \
   --publish 42420:42420/udp \
-  --env=GAME_VERSION='1.21.2' \
+  --env=GAME_VERSION='1.21.4' \
   docker.io/sknnr/vintage-story-server:latest
 ```
 
@@ -316,7 +316,7 @@ podman run \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
   --publish 42420:42420/tcp \
   --publish 42420:42420/udp \
-  --env=GAME_VERSION='1.21.2' \
+  --env=GAME_VERSION='1.21.4' \
   --env=GAME_BRANCH='stable' \
   --env=serverName='My Really Cool Vintage Story Server' \
   --env=password='supersecretpasswordtojoinmycoolserver' \
@@ -340,7 +340,7 @@ Volume=vintage-story-server:/home/vintagestory/server
 PublishPort=42420:42420/tcp
 PublishPort=42420:42420/udp
 ContainerName=vintage-story-server
-Environment=GAME_VERSION="1.21.2"
+Environment=GAME_VERSION="1.21.4"
 
 [Service]
 # Restart service when sleep finishes
