@@ -17,9 +17,9 @@ shutdown () {
 trap 'shutdown' TERM
 
 # Set vars established during image build
-IMAGE_VERSION=$(cat ${VINTAGE_STORY_PATH}/image_version)
-MAINTAINER=$(cat ${VINTAGE_STORY_PATH}/image_maintainer)
-EXPECTED_FS_PERMS=$(cat ${VINTAGE_STORY_PATH}/expected_filesystem_permissions)
+IMAGE_VERSION=$(cat "${VINTAGE_STORY_PATH}/image_version")
+MAINTAINER=$(cat "${VINTAGE_STORY_PATH}/image_maintainer")
+EXPECTED_FS_PERMS=$(cat "${VINTAGE_STORY_PATH}/expected_filesystem_permissions")
 
 echo "$(timestamp) INFO: Launching Vintage Story dedicatged server image ${IMAGE_VERSION} by ${MAINTAINER}"
 
@@ -40,18 +40,18 @@ rm "${VINTAGE_STORY_PATH}/data/test"
 if ! [ -f "${VINTAGE_STORY_PATH}/server/VERSION" ]; then
     echo "$(timestamp) INFO: Downloading Vintage Story server version ${GAME_VERSION} from ${GAME_BRANCH}"
     wget https://cdn.vintagestory.at/gamefiles/${GAME_BRANCH,,}/vs_server_linux-x64_${GAME_VERSION}.tar.gz
-    tar xzf vs_server_linux-x64_${GAME_VERSION}.tar.gz -C "${VINTAGE_STORY_PATH}/server"
+    tar xzf "vs_server_linux-x64_${GAME_VERSION}.tar.gz" -C "${VINTAGE_STORY_PATH}/server"
     echo "${GAME_VERSION}" > "${VINTAGE_STORY_PATH}/server/VERSION"
-    rm -f vs_server_linux-x64_${GAME_VERSION}.tar.gz
+    rm -f "vs_server_linux-x64_${GAME_VERSION}.tar.gz"
     echo "$(timestamp) INFO: Vintage Story server version ${GAME_VERSION} from ${GAME_BRANCH} installed successfully"
-elif [ $(cat ${VINTAGE_STORY_PATH}/server/VERSION) != "$GAME_VERSION" ]; then
+elif [ "$(cat "${VINTAGE_STORY_PATH}/server/VERSION")" != "$GAME_VERSION" ]; then
     echo "$(timestamp) INFO: Current Vintage Story server version does not match version ${GAME_VERSION}, updating"
     echo "$(timestamp) INFO: Cleaning up previous Vintage Story installation..."
-    rm -rf ${VINTAGE_STORY_PATH}/server/*
+    rm -rf "${VINTAGE_STORY_PATH}/server/*"
     wget https://cdn.vintagestory.at/gamefiles/${GAME_BRANCH,,}/vs_server_linux-x64_${GAME_VERSION}.tar.gz
-    tar xzf vs_server_linux-x64_${GAME_VERSION}.tar.gz -C ${VINTAGE_STORY_PATH}/server
-    echo "${GAME_VERSION}" > ${VINTAGE_STORY_PATH}/server/VERSION
-    rm -f vs_server_linux-x64_${GAME_VERSION}.tar.gz
+    tar xzf "vs_server_linux-x64_${GAME_VERSION}.tar.gz" -C "${VINTAGE_STORY_PATH}/server"
+    echo "${GAME_VERSION}" > "${VINTAGE_STORY_PATH}/server/VERSION"
+    rm -f "vs_server_linux-x64_${GAME_VERSION}.tar.gz"
     echo "$(timestamp) INFO: Vintage Story server upgraded to version ${GAME_BRANCH}/${GAME_VERSION} successfully"
 else
     echo "$(timestamp) INFO: Vintage Story server version ${GAME_VERSION} already present"
@@ -59,24 +59,24 @@ fi
 
 # Set backup schedule
 echo "$(timestamp) INFO: Setting backup CRON schedule as ${BACKUP_CRON_SCHEDULE}"
-echo "${BACKUP_CRON_SCHEDULE} ${VINTAGE_STORY_PATH}/backup.sh" > ${VINTAGE_STORY_PATH}/backup_crontab
+echo "${BACKUP_CRON_SCHEDULE} ${VINTAGE_STORY_PATH}/backup.sh" > "${VINTAGE_STORY_PATH}/backup_crontab"
 
 # Check if we need to build a serverconfig.json file
 # If we are running in Kubernetes this isn't used as we just expect a ConfigMap
 if [ ! -f "${VINTAGE_STORY_PATH}/data/serverconfig.json" ]; then
     echo "$(timestamp) INFO: serverconfig.json not found at ${VINTAGE_STORY_PATH}/data/serverconfig.json"
     echo "$(timestamp) INFO: Generating new serverconfig.json"
-    ${VINTAGE_STORY_PATH}/build_serverconfig.sh
+    "${VINTAGE_STORY_PATH}/build_serverconfig.sh"
 elif [ "${REGENERATE_CONFIG}" = "true" ]; then
     echo "$(timestamp) INFO: REGENERATE_CONFIG is true, regenerating serverconfig.json"
-    ${VINTAGE_STORY_PATH}/build_serverconfig.sh
+    "${VINTAGE_STORY_PATH}/build_serverconfig.sh"
 else
     echo "$(timestamp) INFO: Found serverconfig.json at ${VINTAGE_STORY_PATH}/data/serverconfig.json"
 fi
 
 # Start Supervisor to manager VintageStoryServer and Backup processes
 echo "$(timestamp) INFO: Starting Supervisor"
-supervisord -c ${VINTAGE_STORY_PATH}/supervisord.conf &
+supervisord -c "${VINTAGE_STORY_PATH}/supervisord.conf" &
 
 # Hold us open
 wait $!

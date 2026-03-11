@@ -1,25 +1,26 @@
 FROM debian:12-slim
 
-ARG IMAGE_VERSION='v1.0.0-devel'
-ARG MAINTAINER='https://github.com/jsknnr/vintage-story-server'
+ARG IMAGE_VERSION="v1.0.0-devel"
+ARG MAINTAINER="https://github.com/jsknnr/vintage-story-server"
 
 ARG CONTAINER_GID=10000
 ARG CONTAINER_UID=10000
 
 ARG SUPERCRONIC_BINARY="https://github.com/aptible/supercronic/releases/download/v0.2.33/supercronic-linux-amd64"
-ARG DOTNET_RUNTIME='https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/8.0.19/aspnetcore-runtime-8.0.19-linux-x64.tar.gz'
+ARG DOTNET_VERSION="10.0.4"
+ARG DOTNET_RUNTIME="https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/${DOTNET_VERSION}/aspnetcore-runtime-${DOTNET_VERSION}-linux-x64.tar.gz"
 
-ENV GAME_BRANCH='stable'
-ENV GAME_VERSION='1.21.4'
+ENV GAME_BRANCH="stable"
+ENV GAME_VERSION="1.21.4"
 ENV BACKUP_RETENTION_DAYS=7
-ENV BACKUP_CRON_SCHEDULE='0 3 * * *'
-ENV REGENERATE_CONFIG='false'
+ENV BACKUP_CRON_SCHEDULE="0 3 * * *"
+ENV REGENERATE_CONFIG="false"
 
-ENV VINTAGE_STORY_PATH='/home/vintagestory'
-ENV DOTNET_PATH='/.dotnet'
+ENV VINTAGE_STORY_PATH="/home/vintagestory"
+ENV DOTNET_PATH="/.dotnet"
 
-RUN groupadd -g $CONTAINER_GID vintagestory \
-    && useradd -g $CONTAINER_GID -u $CONTAINER_UID -m vintagestory \
+RUN groupadd -g "$CONTAINER_GID" vintagestory \
+    && useradd -g "$CONTAINER_GID" -u "$CONTAINER_UID" -m vintagestory \
     && apt-get update \
     && apt-get install --no-install-recommends -y \
         ca-certificates \
@@ -31,8 +32,8 @@ RUN groupadd -g $CONTAINER_GID vintagestory \
         vim \
     && wget "$DOTNET_RUNTIME" \
     && mkdir "$DOTNET_PATH" \
-    && tar xzf aspnetcore-runtime-8.0.19-linux-x64.tar.gz -C "$DOTNET_PATH" \
-    && rm -f aspnetcore-runtime-8.0.19-linux-x64.tar.gz \
+    && tar xzf "aspnetcore-runtime-${DOTNET_VERSION}-linux-x64.tar.gz" -C "$DOTNET_PATH" \
+    && rm -f "aspnetcore-runtime-${DOTNET_VERSION}-linux-x64.tar.gz" \
     && wget "$SUPERCRONIC_BINARY" \
     && chmod +x supercronic-linux-amd64 \
     && mv supercronic-linux-amd64 /usr/local/bin/supercronic \
