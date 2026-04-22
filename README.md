@@ -6,6 +6,8 @@ Run Vintage Story dedicated server in a container. Optionally includes helm char
 
 **Disclaimer:** This is not an official image. No support, implied or otherwise is offered to any end user by the author or anyone else. Feel free to do what you please with the contents of this repo.
 
+**NOTICE:** Image tag latest/1.4.0 is for Vintage Story >= 1.22.0 which requires dotnet 10. If you are still running an older version of Vintage Story, pin your image tag to 1.3.3 instead of latest to maintain best compatibility with the older Vintage Story version.
+
 ## Managing the Container
 
 The processes within the container do **NOT** run as root. Everything runs as the user vintagestory (gid:10000/uid:10000 by default). If you exec into the container, you will drop into `/home/vintagestory` as the vintagestory user. Persistent volumes should be mounted to `/home/vintagestory/server/` for server binaries and `/home/vintagestory/data` for persistent config, world save, and mod data.
@@ -102,7 +104,7 @@ Game Port is specified in serverconfig.json. Game versions > 1.19 UDP as well as
 
 | Name                 | Description                                                                 | Default   | Required |
 |----------------------|-----------------------------------------------------------------------------|-----------|----------|
-| GAME_VERSION         | Version of Vintage Story server to run                                      | "1.21.4"  | False    |
+| GAME_VERSION         | Version of Vintage Story server to run                                      | "1.22.0"  | False    |
 | GAME_BRANCH          | Which branch to pull server files from, "stable" or "unstable"              | "stable"  | False    |
 | REGENERATE_CONFIG    | If set to true, will regenerate serverconfig.json from environment variables even if there is an existing serverconfig.json | 'faslse' | False |
 | BACKUP_CRON_SCHEDULE | When the backup script should run, expressed in a CRON format: [Example](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#sample_schedules) Default is daily at 3 AM server time (typically UTC) | "0 3 * * *" | False    |
@@ -231,7 +233,7 @@ docker run \
   --mount type=bind,source=/my/local/path/to/serverconfig.json,target=/home/vintagestory/data/serverconfig.json \
   --publish 42420:42420/tcp \
   --publish 42420:42420/udp \
-  --env=GAME_VERSION='1.21.4' \
+  --env=GAME_VERSION='1.22.0' \
   --env=GAME_BRANCH='stable' \
   sknnr/vintage-story-server:latest
 ```
@@ -245,7 +247,7 @@ docker run \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
   --publish 42420:42420/tcp \
   --publish 42420:42420/udp \
-  --env=GAME_VERSION='1.21.4' \
+  --env=GAME_VERSION='1.22.0' \
   --env=GAME_BRANCH='stable' \
   --env=serverName='My Really Cool Vintage Story Server' \
   --env=password='supersecretpasswordtojoinmycoolserver' \
@@ -280,7 +282,7 @@ services:
       - "42420:42420/tcp"
       - "42420:42420/udp"
     environment:
-      - GAME_VERSION=1.21.4
+      - GAME_VERSION=1.22.0
     volumes:
       - vintage-story-data:/home/vintagestory/data
       - vintage-story-server:/home/vintagestory/server
@@ -303,7 +305,7 @@ podman run \
   --mount type=bind,source=/my/local/path/to/serverconfig.json,target=/home/vintagestory/data/serverconfig.json \
   --publish 42420:42420/tcp \
   --publish 42420:42420/udp \
-  --env=GAME_VERSION='1.21.4' \
+  --env=GAME_VERSION='1.22.0' \
   docker.io/sknnr/vintage-story-server:latest
 ```
 
@@ -316,7 +318,7 @@ podman run \
   --mount type=volume,source=vintage-story-server,target=/home/vintagestory/server \
   --publish 42420:42420/tcp \
   --publish 42420:42420/udp \
-  --env=GAME_VERSION='1.21.4' \
+  --env=GAME_VERSION='1.22.0' \
   --env=GAME_BRANCH='stable' \
   --env=serverName='My Really Cool Vintage Story Server' \
   --env=password='supersecretpasswordtojoinmycoolserver' \
@@ -340,7 +342,7 @@ Volume=vintage-story-server:/home/vintagestory/server
 PublishPort=42420:42420/tcp
 PublishPort=42420:42420/udp
 ContainerName=vintage-story-server
-Environment=GAME_VERSION="1.21.4"
+Environment=GAME_VERSION="1.22.0"
 
 [Service]
 # Restart service when sleep finishes
