@@ -16,6 +16,7 @@ declare -A var_paths=(
   ["maxPlayers"]="MaxClients"
   ["password"]="Password"
   ["mapSizeX"]="MapSizeX"
+  ["mapSizeY"]="MapSizeY"
   ["mapSizeZ"]="MapSizeZ"
   ["mapSizeY"]="WorldConfig.MapSizeY"
   ["serverLanguage"]="ServerLanguage"

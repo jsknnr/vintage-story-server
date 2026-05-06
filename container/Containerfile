@@ -1,4 +1,4 @@
-FROM debian:12-slim
+FROM debian:13-slim
 
 ARG IMAGE_VERSION="v1.0.0-devel"
 ARG MAINTAINER="https://github.com/jsknnr/vintage-story-server"
@@ -11,7 +11,7 @@ ARG DOTNET_VERSION="10.0.4"
 ARG DOTNET_RUNTIME="https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/${DOTNET_VERSION}/aspnetcore-runtime-${DOTNET_VERSION}-linux-x64.tar.gz"
 
 ENV GAME_BRANCH="stable"
-ENV GAME_VERSION="1.22.0"
+ENV GAME_VERSION="1.22.2"
 ENV BACKUP_RETENTION_DAYS=7
 ENV BACKUP_CRON_SCHEDULE="0 3 * * *"
 ENV REGENERATE_CONFIG="false"

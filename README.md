@@ -151,7 +151,7 @@ These variables only work when creating a new serverconfig.json, they do not mod
 | mapSizeZ                  | World Z (length) axis size in blocks                                                                                   | 1024000                                       |
 | serverLanguage            | Language for server                                                                                                    | "en"                                          |
 | seed                      | Seed to use for world generation                                                                                       | ""                                            |
-| worldName                 | Name of the world                                                                                                      | "Our Little World"                            |
+| worldName                 | Name of the world                                                                                                      | "VintageWorld"                                |
 | allowCreative             | Whether or not to allow creative mode                                                                                  | true                                          |
 | playStyle                 | The game mode                                                                                                          | "surviveandbuild"                             |
 | playStyleLangCode         | Should match game mode                                                                                                 | "preset-surviveandbuild"                      |
