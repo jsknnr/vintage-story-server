@@ -47,7 +47,7 @@ if ! [ -f "${VINTAGE_STORY_PATH}/server/VERSION" ]; then
 elif [ "$(cat "${VINTAGE_STORY_PATH}/server/VERSION")" != "$GAME_VERSION" ]; then
     echo "$(timestamp) INFO: Current Vintage Story server version does not match version ${GAME_VERSION}, updating"
     echo "$(timestamp) INFO: Cleaning up previous Vintage Story installation..."
-    rm -rf "${VINTAGE_STORY_PATH}/server/*"
+    rm -rf "${VINTAGE_STORY_PATH}/server"
     wget https://cdn.vintagestory.at/gamefiles/${GAME_BRANCH,,}/vs_server_linux-x64_${GAME_VERSION}.tar.gz
     tar xzf "vs_server_linux-x64_${GAME_VERSION}.tar.gz" -C "${VINTAGE_STORY_PATH}/server"
     echo "${GAME_VERSION}" > "${VINTAGE_STORY_PATH}/server/VERSION"
